@@ -1,0 +1,237 @@
+<div class="auth">
+    <div class="auth_left" style="width: 1500px;">
+        <div class="card" style="z-index: auto;">
+            <div class="text-center mb-5">
+                <a class="header-brand" [routerLink]="['/gt-accueil']" href="javascript:void(0)">
+                    <img src="../../../../assets/images/themes/triskelion.jpg" style="width: 100px; height:100px;" alt="logo">
+                </a>
+            </div>
+            <div class="card-body">
+                <form novalidate (ngSubmit)="Enregistrer(rformulaire)" #rformulaire="ngForm">
+                    <div class="card-title text-center">Créer un nouveau compte</div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nom <span>*</span></label>
+                            <input type="text"
+                             id="nom"
+                             name="nom"
+                             class="form-control" 
+                             required aria-required="true"
+                             [(ngModel)]="user.nom"
+                             #nomvar="ngModel"
+                             [ngClass]="{'is-invalid': nomvar.touched && nomvar.invalid}"
+                             placeholder="Entrez votre nom"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="nomvar.errors?.required">
+                                    Entrez votre nom
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Prénom <span>*</span></label>
+                            <input type="text"
+                             id="prenom"
+                             name="prenom"
+                             class="form-control" 
+                             required aria-required="true"
+                             [(ngModel)]="user.prenom"
+                             #prenomvar="ngModel"
+                             [ngClass]="{'is-invalid': prenomvar.touched && !prenomvar.valid}"
+                             placeholder="Entrer votre prénom"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="prenomvar.errors?.required">
+                                    Entrez votre prénom
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Email <span>*</span></label>
+                            <input type="text"
+                             id="email"
+                             name="email" email
+                             class="form-control" 
+                             required aria-required="true" 
+                             [(ngModel)]="user.email"
+                             #emailvar="ngModel"
+                             [ngClass]="{'is-invalid': emailvar.touched && !emailvar.valid}" 
+                             placeholder="Entrer votre email"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="emailvar.errors?.required">
+                                    Entrez votre email
+                                </span>
+                                <span *ngIf="emailvar.errors?.email">
+                                    Entrez un email valide
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Date de naissance <span>*</span></label>
+                            <input type="date" max="2010-01-01"
+                             id="dateNaiss"
+                             name="dateNaiss"
+                             class="form-control"
+                             required aria-required="true"
+                             [(ngModel)]="user.dateNaiss"
+                             #dateNaissvar="ngModel"
+                             [ngClass]="{'is-invalid': dateNaissvar.touched && !dateNaissvar.valid}"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="dateNaissvar.errors">
+                                    Choisissez une date de naissance valide
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Adresse <span>*</span></label>
+                            <input type="text"
+                             id="adresse"
+                             name="adresse"
+                             class="form-control" 
+                             required aria-required="true"
+                             [(ngModel)]="user.adresse"
+                             #adressevar="ngModel"
+                             [ngClass]="{'is-invalid': adressevar.touched && !adressevar.valid}"
+                             placeholder="Entrer votre adresse"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="adressevar.errors?.required">
+                                    Entrez votre adresse
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Numéro de téléphone <span>*</span></label>
+                            <input type="tel"
+                             id="numTel"
+                             name="numTel"
+                             class="form-control" 
+                             required aria-required="true"
+                             [(ngModel)]="user.numTel"
+                             #numTelvar="ngModel"
+                             [ngClass]="{'is-invalid': numTelvar.touched && !numTelvar.valid}"
+                             placeholder="77 123 45 67"
+                             pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="numTelvar.errors?.required">
+                                    Entrez votre numéro de téléphone
+                                </span>
+                                <span *ngIf="numTelvar.errors?.pattern">
+                                    Entrez un numéro de téléphone valide
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Profession <span>*</span></label>
+                            <input type="text"
+                             id="profession"
+                             name="profession" 
+                             class="form-control" 
+                             required aria-required="true"
+                             [(ngModel)]="user.profession"
+                             #professionvar="ngModel"
+                             [ngClass]="{'is-invalid': professionvar.touched && !professionvar.valid}"
+                             placeholder="Entrer votre profession"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="professionvar.errors?.required">
+                                    Entrez votre profession
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Mot de passe <span>*</span></label>
+                            <input type="password"
+                             id="password"
+                             name="password"
+                             class="form-control" 
+                             required aria-required="true" 
+                             [(ngModel)]="user.password"
+                             #passwordvar="ngModel"
+                             [ngClass]="{'is-invalid': passwordvar.touched && !passwordvar.valid}"
+                             placeholder="Entrer votre mot de passe"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="passwordvar.errors?.required">
+                                    Entrez votre mot de passe
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Confirmer le mot de passe <span>*</span></label>
+                            <input type="password"
+                             id="cpassword"
+                             name="cpassword"
+                             class="form-control" 
+                             required aria-required="true" 
+                             [(ngModel)]="cpassword"
+                             #cpasswordvar="ngModel"
+                             [ngClass]="{'is-invalid': cpasswordvar.touched && !cpasswordvar.valid}"
+                             placeholder="Confirmer votre mot de passe"
+                            >
+                            <small class="invalid-feedback">
+                                <span *ngIf="cpasswordvar.errors?.required">
+                                    Entrez la confirmation
+                                </span>
+                            </small>
+                            <small *ngIf="!verif()">
+                                <span>
+                                    {{conf}}
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sexe <span>*</span></label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input id="masculin" name="sexe" type="radio" value="Masculin" [(ngModel)]="user.sexe">
+                                    <label for="masculin">&nbsp;Masculin</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input id="feminin" name="sexe" type="radio" value="Feminin" [(ngModel)]="user.sexe">
+                                    <label for="feminin">&nbsp;Féminin</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label text-center">Statut matrimonial <span>*</span></label>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input id="celibataire" name="status_matrimonial" type="radio" value="Célibataire" [(ngModel)]="user.status_matrimonial">
+                                    <label for="celibataire">&nbsp;Célibataire</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="marie" name="status_matrimonial" type="radio" value="Marié" [(ngModel)]="user.status_matrimonial">
+                                    <label for="marie">&nbsp;Marié(e)</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="veuf" name="status_matrimonial" type="radio" value="Veuf" [(ngModel)]="user.status_matrimonial">
+                                    <label for="veuf">&nbsp;Veuf/Veuve</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="divorce" name="status_matrimonial" type="radio" value="Divorcé" [(ngModel)]="user.status_matrimonial">
+                                    <label for="divorce">&nbsp;Divorcé(e)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button [disabled]="rformulaire.invalid" type="submit" id="submit" class="btn btn-primary btn-block">S'enregistrer</button>
+                    </div><br>
+                    <small class="d-flex justify-content-center">
+                        <span id="erreur"></span>
+                    </small>
+                </form>
+            </div>
+            <div class="text-center text-muted">
+                Vous avez déjà un compte ? <a [routerLink]="['/connexion']" href="javascript:void(0)">Connexion</a>
+            </div>
+        </div>
+    </div>
+    <div class="auth_right">
+        <img src="../../../../assets/images/themes/ultima_test.svg" class="img-fluid" alt="Connexion_accueil">
+    </div>
+</div>

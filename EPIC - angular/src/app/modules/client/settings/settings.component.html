@@ -1,0 +1,199 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="d-lg-flex justify-content-between">
+                <ul class="nav nav-tabs page-header-tab">
+                    <li class="nav-item"><a class="nav-link" [ngClass]="{'active': Profil}" data-toggle="tab"
+                            (click)="onTab('1')" href="javascript:void(0)">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link" [ngClass]="{'active': Changepassword}" data-toggle="tab"
+                            (click)="onTab('2')" href="javascript:void(0)">Changer Mot de Passe</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="Profil" [ngClass]="{'show active': Profil}">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Informations Personnelles</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form novalidate (ngSubmit)="Actualiser(actuformulaire)" #actuformulaire="ngForm">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Prénom <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="prenom" ngModel={{user.prenom}} [(ngModel)]="user.prenom">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Nom <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="nom" ngModel={{user.nom}} [(ngModel)]="user.nom">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Date de naissance <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="date" name="dateNaiss" ngModel={{user.dateNaiss}} [(ngModel)]="user.dateNaiss">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Email <span style="color: red;">*</span></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">
+                                                                <i class="icon-envelope"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="email" class="form-control" name="email" ngModel={{user.email}} [(ngModel)]="user.email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Numéro de téléphone <span style="color: red;">*</span></label>
+                                                    <input class="form-control" name="numTel" ngModel={{user.numTel}} [(ngModel)]="user.numTel" type="tel">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Addresse <span style="color: red;">*</span></label>
+                                                    <textarea class="form-control" name="adresse" ngModel={{user.adresse}} [(ngModel)]="user.adresse"
+                                                        placeholder="{{user.adresse}}"
+                                                        aria-label="With textarea"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Profession <span style="color: red;">*</span></label>
+                                                    <input type="text" name="profession" ngModel={{user.profession}} [(ngModel)]="user.profession" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div style="margin-left: 150px;">
+                                                    <label>Sexe <span>*</span></label>
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <input id="masculin" name="sexe" [(ngModel)]="user.sexe" type="radio" value="Masculin">
+                                                            <label for="masculin">&nbsp;Masculin</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input id="feminin" name="sexe" [(ngModel)]="user.sexe" type="radio" value="Feminin">
+                                                            <label for="feminin">&nbsp;Féminin</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <label>Statut matrimonial <span>*</span></label>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <input id="celibataire" name="status_matrimonial" [(ngModel)]="user.status_matrimonial" type="radio" value="Célibataire">
+                                                        <label for="celibataire">&nbsp;Célibataire</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input id="marie" name="status_matrimonial" [(ngModel)]="user.status_matrimonial" type="radio" value="Marié">
+                                                        <label for="marie">&nbsp;Marié(e)</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input id="veuf" name="status_matrimonial" [(ngModel)]="user.status_matrimonial" type="radio" value="Veuf">
+                                                        <label for="veuf">&nbsp;Veuf/Veuve</label>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <input id="divorce" name="status_matrimonial" [(ngModel)]="user.status_matrimonial" type="radio" value="Divorcé">
+                                                        <label for="divorce">&nbsp;Divorcé(e)</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 text-right m-t-20">
+                                                <button [disabled]="actuformulaire.invalid" type="submit" class="btn btn-primary">Sauvegarder</button> &nbsp;
+                                                <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="Change_Password" [ngClass]="{'show active': Changepassword}">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Changer Mot de Passe</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-4 col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" value="{{user.prenom}} {{user.nom}}" disabled="">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12">
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" disabled=""
+                                                    value="{{user.email}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" disabled="" value="{{user.numTel}}">
+                                            </div>
+                                        </div>
+                                        <form style="width: 100%;" novalidate (ngSubmit)="Modifier(formulaire)" #formulaire="ngForm">
+                                            <div class="col-lg-12 col-md-12">
+                                                <hr>
+                                                <h6>Changer le mot de passe</h6>
+                                                <div class="form-group">
+                                                    <input type="password" name="password" class="form-control"
+                                                        placeholder="Mot de Passe actuel" required aria-required="true"
+                                                        [(ngModel)]="password"
+                                                    >
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" name="npassword" class="form-control"
+                                                        placeholder="Nouveau Mot de Passe" required aria-required="true"
+                                                        [(ngModel)]="npassword" #npasswordvar="ngModel" [ngClass]="{'is-invalid': npasswordvar.touched && !npasswordvar.valid}"
+                                                    >
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" name="cpassword" class="form-control"
+                                                        placeholder="Confirmer le Nouveau Mot de Passe" required aria-required="true"
+                                                        [(ngModel)]="cpassword" #cpasswordvar="ngModel" [ngClass]="{'is-invalid': cpasswordvar.touched && !cpasswordvar.valid}"
+                                                    >
+                                                    <small class="invalid-feedback">
+                                                        <span *ngIf="cpasswordvar.errors?.required">
+                                                            Entrez la confirmation
+                                                        </span>
+                                                    </small>
+                                                    <small *ngIf="!confirm()">
+                                                        <span style="color: red;">
+                                                            {{conf}}
+                                                        </span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 m-t-20 text-right">
+                                                <button type="submit" class="btn btn-primary">Sauvegarder</button> &nbsp;
+                                                <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

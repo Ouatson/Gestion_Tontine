@@ -1,0 +1,105 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body mt-3 fixNavMargin">
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12">
+                    <div class="mb-4">
+                        <h4>Bienvenu {{user.prenom}} {{user.nom}} !</h4>
+                        <small>Vous êtes sur la page d'accueil.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux tontines dont je suis le proprietaire -->
+                            <a [routerLink]="['/gt-mes-tontines']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-book-open"></i>
+                                <!-- Nombre de tontines -->
+                                <span>Mes Tontines <div>{{tontines.length}}</div></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux tontines dont je fais parti -->
+                            <a [routerLink]="['/gt-mes-participations']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-book-open"></i>
+                                <!-- Nombre de tontines -->
+                                <span>Mes Participations <div>{{participationsTontines.length}}</div></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux demandes -->
+                            <a [routerLink]="['/gt-demandes-participations']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-note"></i>
+                                <span>Demandes de participations <div>{{demandesSoumises.length}}</div></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux versements -->
+                            <a [routerLink]="['/gt-actions-versement']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-credit-card"></i>
+                                <span>Versements</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux tirages -->
+                            <a [routerLink]="['/gt-actions-tirages']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-shuffle"></i>
+                                <span>Tirages</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Lien donnant aux signalements -->
+                            <a [routerLink]="['/gt-gestion-signal']" href="javascript:void(0)" class="my_sort_cut text-muted">
+                                <i class="icon-pie-chart"></i>
+                                <span>Report Signalement</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="row clearfix row-deck">
+                <div class="col-xl-12 col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title" style="text-align: center; width: 100%; font-weight: bolder;">Votre Site de Gestion de Tontine</h4>
+                        </div>
+                        <div class="card-body cont">
+                            <img src="../../../../assets/images/themes/tontine_accueil.jpg" class="wide" alt="Image de tontine">
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

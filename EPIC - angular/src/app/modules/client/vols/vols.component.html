@@ -1,0 +1,213 @@
+ <app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-md-end align-items-center mb-3">
+                <!-- Bouton pour ouvrir le modal d'ajout de tontine -->
+                <div class="header-action mt-10 float-right">
+                    <button type="button" class="btn btn-primary" (click)="ajoutModal(ajout)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        <i class="fe fe-plus mr-2"></i>Nouvelle déposition
+                    </button> &nbsp;
+                    <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tableau des listes de depositions de vols -->
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="depositions" [ngClass]="{'show active': EmpAllTab}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dépositions</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchVols(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." autocomplete="off" name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table *ngIf="listVols?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Lieu vol</th>
+                                            <th>Date vol</th>
+                                            <th>Concernés</th>
+                                            <th>Descripton</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let vol of listVols">
+                                            <td>{{vol.tontineNom}}</td>
+                                            <td>{{vol.lieu}}</td>
+                                            <td>{{vol.date}}</td>
+                                            <td>
+                                                <p *ngFor="let concern of vol.concernes">
+                                                    {{concern.prenom}} {{concern.nom}}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <textarea style="border: none;" name="description" id="description" cols="60" rows="4" readonly>{{vol.description}}</textarea>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success" (click)="modifDeposition(modif, vol)">Modifier</button>
+                                                <button class="btn btn-danger ml-2" (click)="supprimerDeposition(vol.id)">Supprimer</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="listVols?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading">PAS DE DEPOSITION DE VOLS !</h4>
+                                        <p>VOUS N'AVEZ PAS CREE DE DEPOSITION.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal ajout de deposition de vols -->
+<ng-template #ajout>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Vols</h5>
+        <button id="fermetureA" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Faire une déposition</h5>
+                    <form (ngSubmit)="soumission(volForm)" #volForm="ngForm">
+                        <div class="form-row">
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
+                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="vol.tontineId" #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
+                                    <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="lieu">Lieu de l'incident</label>
+                                <input name="lieu" [(ngModel)]="vol.lieu" id="lieu" placeholder="Lieu de l'incident"
+                                    type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="date">Date de l'incident</label>
+                                <input name="date" [(ngModel)]="vol.date" id="date" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="prb">Personnes internes concernées (non-obligatoire)</label><br>
+                                <button (click)="listParticipants(tontineId)" type="button" style="width: 100%;" class="btn btn-lg btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Liste
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <span *ngIf="participantsTontine?.length != 0">
+                                        <!-- <li class="dropdown-item" *ngFor="let part of createRange(participantsTontine.length)">
+                                            <input class="form-control" type="checkbox" name="lebon" id="lebon">
+                                            <label for="lebon">Les bons</label>
+                                        </li> -->
+                                        <li class="dropdown-item" *ngFor="let part of participantsTontine">
+                                            <input id="{{part.id}}" class="form-control" type="checkbox" value="{{part.id}}" (change)="getParticipantId($event,part.id)">
+                                            <label for="{{part.id}}">{{part.prenom}} {{part.nom}}</label>
+                                        </li>
+                                    </span>
+                                </ul>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <label for="description">Décrivez nous les faits !</label><br>
+                                <textarea style="width: 100%;" name="description" [(ngModel)]="vol.description" id="description"
+                                    class="form-control" cols="30" rows="10" required></textarea>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <button [disabled]="volForm.invalid" class="btn btn-success btn-block ml-auto mr-auto" style="width: 25%;" type="submit">Envoyer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modification de deposition -->
+<ng-template #modif>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Vols</h5>
+        <button id="fermetureM" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Changer la déposition</h5>
+                    <form (ngSubmit)="modification(mod)" #mod="ngForm">
+                        <div class="form-row">
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <input type="hidden" name="id" ngModel={{volSelected.id}} class="form-control" required>
+                                <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
+                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="volSelected.tontineId" ngModel={{volSelected.tontineId}} #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
+                                    <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="lieu">Lieu de l'incident</label>
+                                <input name="lieu" [(ngModel)]="volSelected.lieu" ngModel={{volSelected.lieu}} id="lieu"
+                                    type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="date">Date de l'incident</label>
+                                <input name="date" [(ngModel)]="volSelected.date" ngModel={{volSelected.date}} id="date" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="prb">Personnes internes concernées (non-obligatoire)</label><br>
+                                <button (click)="listParticipants(tontineId)" type="button" style="width: 100%;" class="btn btn-lg btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Liste
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <span *ngIf="participantsTontine?.length != 0">
+                                        <li class="dropdown-item" *ngFor="let part of participantsTontine">
+                                            <input id="{{part.id}}" class="form-control" type="checkbox" [checked]="selectedParticipants.includes(part.id)" value="{{part.id}}" (change)="getParticipantId($event,part.id)">
+                                            <label for="{{part.id}}">{{part.prenom}} {{part.nom}}</label>
+                                        </li>
+                                    </span>
+                                </ul>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <label for="description">Décrivez nous les faits !</label><br>
+                                <textarea style="width: 100%;" name="description" [(ngModel)]="volSelected.description" ngModel={{volSelected.description}} id="description"
+                                    class="form-control" cols="30" rows="10" required></textarea>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <button [disabled]="mod.invalid" class="btn btn-success btn-block ml-auto mr-auto" style="width: 25%;" type="submit">Modifier</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

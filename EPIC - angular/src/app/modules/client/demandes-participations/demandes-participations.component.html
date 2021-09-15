@@ -1,0 +1,288 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <ul class="nav nav-tabs page-header-tab">
+                    <li class="nav-item"><a class="nav-link" id="Employee-tab" data-toggle="tab"
+                            href="javascript:void(0)" (click)="onTab('1')" [ngClass]="{'active': DemSoumises}">Demandes soumises</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" id="Employee-tab" data-toggle="tab"
+                            href="javascript:void(0)" (click)="onTab('2')" [ngClass]="{'active': DemEmises}">Demandes émises</a>
+                    </li>
+                </ul>
+                <div class="header-action">
+                    <button type="button" class="btn btn-primary" (click)="rejoindreTontine(demande)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        <i class="fe fe-plus mr-2"></i>
+                        Rejoindre tontine
+                    </button>
+                    <button type="button" class="btn btn-primary ml-10" (click)="historiques(historique)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        Historique demandes
+                    </button> &nbsp;
+                    <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Nombre total de Demandes</span><br>
+                                <span *ngIf="demandesToutesTontines.length != 0; else others">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="demandesToutesTontines.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #others><h5>Aucune demande d'adhération</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Demandes émises</span><br>
+                                <span *ngIf="demandesEmises.length != 0; else emis">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="demandesEmises.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #emis><h5>Aucune demande émise</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Demandes reçues</span><br>
+                                <span *ngIf="demandesSoumises.length != 0; else soumis">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="demandesSoumises.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #soumis><h5>Aucune demande reçue</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Demandes en attente</span><br>
+                                <span *ngIf="demandesAttente.length != 0; else attente">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="demandesAttente.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #attente><h5>Aucune demande en attente d'action</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <!-- Demandes soumises -->
+                <div class="tab-pane fade" id="Demandes-Attente" [ngClass]="{'show active': DemSoumises}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Liste</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchDemandes(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table *ngIf="demandesAttente?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Email</th>
+                                            <th>Nom tontine</th>
+                                            <th>Description tontine</th>
+                                            <th>Date demande</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let demande of demandesAttente">
+                                            <td>{{demande.nom_complet}}</td>
+                                            <td>{{demande.email}}</td>
+                                            <td>{{demande.tontine.nom}}</td>
+                                            <td>{{demande.tontine.description}}</td>
+                                            <td>{{demande.dateDemande}}
+                                            <td style="text-align: center;">
+                                                <button class="btn btn-danger mr-2" (click)="alertRefus(demande)">Refuser</button>
+                                                <button class="btn btn-success" (click)="alertAccepter(demande)">Accepter</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="demandesAttente?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading text-center">AUCUNE DEMANDE DE PARTICIPATION EN ATTENTE !</h4>
+                                        <p class="text-center">VOUS N'AVEZ PAS DE DEMANDES.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Demandes emises -->
+                <div class="tab-pane fade" id="DemandesEmises" [ngClass]="{'show active': DemEmises}" role="tabpanel">
+                    <div class="card col-lg-8 col-md-12" style="margin: 0 auto; float: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">Liste</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm"
+                                            placeholder="Recherche..." name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table *ngIf="demandesEmisesAttente?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nom tontine</th>
+                                        <th>Description tontine</th>
+                                        <th>Date de demande</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let demande of demandesEmisesAttente">
+                                        <td>{{demande.tontine.nom}}</td>
+                                        <td>{{demande.tontine.description}}</td>
+                                        <td>{{demande.dateDemande}}
+                                        <td style="text-align: center;">
+                                            <button class="btn btn-danger mr-2" (click)="alertAnnuler(demande)">Annuler</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div *ngIf="demandesEmisesAttente?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                <div class="alert alert-info" role="alert">
+                                    <h4 class="alert-heading text-center">AUCUNE DEMANDE DE PARTICIPATION EMISE EN ATTENTE !</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal de demande de participation -->
+<ng-template #demande>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; width: 100%;">Demande de Participation</h5>
+        <button id="fermeture" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row clearfix">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Renseignez les informations svp.</h5>
+                    <form novalidate (ngSubmit)="demandeParticipation(rejoindre)" #rejoindre="ngForm">
+                        <div class="form-row">
+                            <div class="mr-3">
+                                <label for="code">Code de la tontine</label>
+                                <input class="form-control" name="code" id="code" type="text" [(ngModel)]="code" placeholder="Entrez ici le code..." required>
+                            </div>
+                            <div class="mr-3">
+                                <label for="prb">Personne à contacter en cas de problème</label>
+                                <input id="prb" name="probleme" type="text" class="form-control" required
+                                    placeholder="Nom de la personne" [(ngModel)]="moiPart.probleme">
+                            </div>
+                            <div>
+                                <label for="telprb">Numéro de téléphone de la personne</label>
+                                <input id="telprb" name="telprobleme" telprobleme type="tel" class="form-control" required
+                                    placeholder="77 123 45 67" [(ngModel)]="moiPart.telprobleme" #telproblemevar="ngModel"
+                                    pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                                    [ngClass]="{'is-invalid': (telproblemevar.touched && !telproblemevar.valid) || telprobleme == user.numTel}">
+                                <small class="invalid-feedback">
+                                    <span *ngIf="telproblemevar.errors?.required">
+                                        Entrez son numéro de téléphone
+                                    </span>
+                                    <span *ngIf="telproblemevar.errors?.pattern">
+                                        Entrez un numéro de téléphone valide
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+                        <hr>
+                        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" data-dismiss="modal">Fermer</button>
+                        <button [disabled]="rejoindre.invalid" type="submit" class="btn btn-success float-right">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour l'historique des demandes dont on a effectue une action -->
+<ng-template #historique>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; width: 100%;">Historique des demandes</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <table *ngIf="historiqueDemandes?.length != 0" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Nom tontine</th>
+                    <th>Description tontine</th>
+                    <th>Décision</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let demande of historiqueDemandes">
+                    <td>{{demande.nom_complet}}</td>
+                    <td>{{demande.email}}</td>
+                    <td>{{demande.tontine.nom}}</td>
+                    <td>{{demande.tontine.description}}</td>
+                    <td>
+                        <span *ngIf="demande.acceptation; else refus;">
+                            <!-- ;else nonAccept -->
+                            Accepté le {{demande.dateAction}} &#10004;
+                        </span>
+                        <ng-template #refus>Refusé le {{demande.dateAction}} &#10008;</ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="historiqueDemandes?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading text-center">AUCUNE DEMANDE DE PARTICIPATION ACCEPTEE OU REFUSEE !</h4>
+                <p class="text-center">VOUS N'AVEZ NI ACCEPTE NI REFUSE AUCUNE DEMANDES.</p>
+            </div>
+        </div>
+    </div>
+</ng-template>

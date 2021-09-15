@@ -1,0 +1,35 @@
+<div id="page_top" class="section-body top_dark">
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="left">
+                <h1 class="page-title">{{title}}</h1>
+                <div class="input-group xs-hide">
+                    <input type="text" class="form-control" placeholder="Recherche...">
+                </div>
+            </div>
+            <div class="right">
+                <div class="notification d-flex">
+                    <div class="dropdown d-flex" dropdown>
+                        <a class="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-1"
+                            href="javascript:void(0);" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false" id="button-basic" dropdownToggle aria-controls="dropdown-basic"
+                            style="color: #fff;box-shadow: none;"><i class="fa fa-user"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow" id="dropdown-basic"
+                            *dropdownMenu role="menu" aria-labelledby="button-basic">
+                            <a class="dropdown-item" [routerLink]="['/parametres']" href="javascript:void(0)">
+                                <i class="dropdown-icon fe fe-settings"></i>
+                                Paramètres
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" (click)="Deconnexion()">
+                                <!--  [routerLink]="['/connexion']" href="javascript:void(0)" -->
+                                <i class="dropdown-icon fe fe-log-out"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

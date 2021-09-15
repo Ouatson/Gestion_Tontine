@@ -1,0 +1,97 @@
+<div class="auth">
+    <div class="auth_left" style="width: 1000px;">
+        <div class="card" style="z-index: auto;">
+            <div class="text-center mb-2">
+                <a class="header-brand" [routerLink]="['/gt-accueil']" href="javascript:void(0)">
+                    <img src="../../../../assets/images/themes/triskelion.jpg" style="width: 100px; height:100px;" alt="logo">
+                </a>
+            </div>
+            <div class="card-body">
+                <form novalidate (ngSubmit)="Connexion(formulaire)" #formulaire="ngForm">
+                    <div class="card-title text-center">Connectez vous à votre compte</div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email"
+                         id="email"
+                         name="email" 
+                         required 
+                         email 
+                         aria-required="true"
+                         [(ngModel)]="user.email"
+                         #emailvar="ngModel"
+                         [ngClass]="{'is-invalid': emailvar.touched && !emailvar.valid}"
+                         class="form-control"
+                         placeholder="Entrer votre email"
+                        >
+                        <small class="invalid-feedback">
+                            <span *ngIf="emailvar.errors?.required">
+                                Entrez votre email.
+                            </span>
+                            <span *ngIf="emailvar.errors?.email">
+                                Entrez un email valide
+                            </span>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="motPasse" class="form-label">Mot de Passe 
+                            <a [routerLink]="['/oubli-mot-passe']" href="javascript:void(0)" class="float-right small">
+                                Mot de passe oublié
+                            </a>
+                        </label>
+                        <input type="password"
+                         class="form-control" 
+                         id="motPasse" 
+                         name="password" 
+                         required
+                         aria-required="true"
+                         [(ngModel)]="user.password"
+                         #passwordVar="ngModel"
+                         [ngClass]="{'is-invalid': passwordVar.touched && !passwordVar.valid}"
+                         placeholder="Entrer votre mot de Passe"
+                        >
+                        <small class="invalid-feedback">
+                            <span *ngIf="passwordVar.errors?.required">
+                                Entrez votre mot de passe.
+                            </span>
+                        </small>
+                    </div>
+                    <div class="form-footer">
+                        <input type="submit" value="Connexion" style="width: 100%;" class="btn btn-primary btn-block"><br>
+                        <small class="d-flex justify-content-center">
+                            <span id="erreur"></span>
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center text-muted">
+                Pas de compte ? <a [routerLink]="['/enregistrer']" href="javascript:void(0)">S'enregistrer</a>
+            </div>
+        </div>
+    </div>
+    <div class="auth_right">
+        <img src="../../../../assets/images/themes/ultima_test.svg" class="img-fluid" alt="Connexion_accueil">
+        <!-- <carousel [isAnimated]="true">
+            <slide>
+                <img src="assets/images/slider1.svg" class="img-fluid" alt="first slide">
+                <div class="px-4 mt-4">
+                    <h4>Fully Responsive</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
+            </slide>
+            <slide>
+                <img src="assets/images/slider2.svg" class="img-fluid" alt="second slide">
+                <div class="px-4 mt-4">
+                    <h4>Quality Code and Easy Customizability</h4>
+                    <p>There are many variations of passages of Lorem Ipsum available.</p>
+                </div>
+            </slide>
+            <slide>
+                <img src="assets/images/slider3.svg" class="img-fluid" alt="third slide">
+                <div class="px-4 mt-4">
+                    <h4>Cross Browser Compatibility</h4>
+                    <p>Overview We're a group of women who want to learn JavaScript.</p>
+                </div>
+            </slide>
+        </carousel> -->
+    </div>
+</div>

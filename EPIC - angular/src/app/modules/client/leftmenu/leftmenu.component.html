@@ -1,0 +1,179 @@
+<div id="header_top" class="header_top">
+    <div class="container">
+        <div class="hleft">
+            <a class="header-brand" [routerLink]="['/gt-accueil']" href="javascript:void(0)">
+                <!-- <i class="fe fe-command brand-logo"></i> -->
+                <img src="../../../../assets/images/themes/triskelion.jpg" alt="logo">
+            </a>
+        </div>
+        <div class="hright">
+            <div class="dropdown">
+                <a href="javascript:void(0)" class="nav-link icon settingbar" (click)="toggleSettingMenu()">
+                    <i class="fa fa-gear" data-toggle="tooltip" data-placement="right" title="Settings"></i><!--  fa-spin -->
+                </a>
+                <a href="javascript:void(0)" (click)="toggleMenu()" class="nav-link icon menu_toggle">
+                    <i class="fa  fa-align-left"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="rightsidebar" class="right_sidebar">
+    <a href="javascript:void(0)" (click)="toggleSettingMenu()" class="p-3 settingbar float-right"><i
+            class="fa fa-close"></i></a>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="javascript:void(0)" (click)="onTab('1')"
+                [ngClass]="{'active': chatTab}" aria-expanded="true">Paramètres
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane vivify fadeIn active" [ngClass]="{'active': chatTab}" id="Settings"
+            aria-expanded="true">
+            <div class="mb-4">
+                <h6 class="font-14 font-weight-bold text-muted">Ecriture de style</h6>
+                <div class="custom-controls-stacked font_setting">
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" (click)="onFontStyle(1)" name="font"
+                            value="font-opensans" [checked]="fontSelect == 'font-opensans' ? 'checked': null">
+                        <span class="custom-control-label">Open Sans Font</span>
+                    </label>
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" (click)="onFontStyle(2)" name="font"
+                            value="font-montserrat" [checked]="fontSelect=='font-montserrat' ? 'checked': null">
+                        <span class="custom-control-label">Montserrat Google Font</span>
+                    </label>
+                    <label class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" (click)="onFontStyle(3)" name="font"
+                            value="font-roboto" [checked]="fontSelect == 'font-roboto' ? 'checked': null">
+                        <span class="custom-control-label">Robot Google Font</span>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <h6 class="font-14 font-weight-bold mt-4 text-muted">Paramètres Généraux</h6>
+                <ul class="setting-list list-unstyled mt-1 setting_switch">
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Mode nuit</span>
+                            <input type="checkbox" (click)="onGeneralSetting(1,$event)" name="custom-switch-checkbox"
+                                class="custom-switch-input btn-darkmode" [checked]="toggle1 ? 'checked': null">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Entête en blanc</span>
+                            <input type="checkbox" (click)="onGeneralSetting(2,$event)" name="custom-switch-checkbox"
+                                class="custom-switch-input btn-pageheader" [checked]="toggle2 ? 'checked' : null">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Menu Lateral en noir</span>
+                            <input type="checkbox" (click)="onGeneralSetting(3,$event)" name="custom-switch-checkbox"
+                                class="custom-switch-input btn-sidebar" [checked]="toggle3 ? 'checked': null">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Gradient Color</span>
+                            <input type="checkbox" (click)="onGeneralSetting(4,$event)" name="custom-switch-checkbox"
+                                class="custom-switch-input btn-gradient" [checked]="toggle4 ? 'checked': null">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="custom-switch">
+                            <span class="custom-switch-description">Perspective 3D</span>
+                            <input type="checkbox" (click)="onGeneralSetting(5,$event)" name="custom-switch-checkbox"
+                                class="custom-switch-input btn-boxshadow" [checked]="toggle5 ? 'checked': null">
+                            <span class="custom-switch-indicator"></span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<div id="left-sidebar" class="sidebar ">
+    <h5 class="brand-name">Gestion des TONTINES</h5>
+    <nav id="left-sidebar-nav" class="sidebar-nav">
+        <ul class="metismenu">
+            <li class="g_heading">Menu</li>
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                <a href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+                    aria-controls="collapseBasic" class="has-arrow arrow-c">
+                    <i class="icon-list"></i><span>Tontines</span>
+                </a>
+                <ul class="collapse" id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-accueil']" href="javascript:void(0)">
+                            <span>Accueil</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-mes-tontines']" href="javascript:void(0)">
+                            <span>Mes Tontines</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-mes-participations']" href="javascript:void(0)">
+                            <span>Mes Participations</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-demandes-participations']" href="javascript:void(0)">
+                            <span>Demandes de Participations</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                <a href="javascript:void(0)" (click)="isActionsCollapsed = !isActionsCollapsed"
+                    [attr.aria-expanded]="!isActionsCollapsed" aria-controls="ActionsCollapsed"
+                    class="has-arrow arrow-c">
+                    <i class="icon-action-redo"></i><span>Actions</span>
+                </a>
+                <ul class="collapse" id="ActionsCollapsed" [collapse]="isActionsCollapsed" [isAnimated]="true">
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-actions-versement']" href="javascript:void(0)">Versement</a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-actions-tirages']" href="javascript:void(0)">Tirages</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" (click)="isProblemeCollapsed = !isProblemeCollapsed"
+                    [attr.aria-expanded]="!isProblemeCollapsed" aria-controls="ProblemeCollapsed" class="has-arrow arrow-c">
+                    <i class="icon-question"></i><span>Gestion des Problèmes</span>
+                </a>
+                <ul class="submenu" class="collapse" id="ProblemeCollapsed" [collapse]="isProblemeCollapsed"
+                    [isAnimated]="true">
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-gestion-vols']" href="javascript:void(0)">
+                            <span>Gestion des Vols</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-gestion-impayes']" href="javascript:void(0)">
+                            <span>Gestion des Impayes/Virements</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/gt-gestion-signal']" href="javascript:void(0)">
+                            <span>Signaler un problème</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

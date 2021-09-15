@@ -1,0 +1,272 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <ul class="nav nav-tabs page-header-tab">
+                    <li class="nav-item"><a class="nav-link" id="Employee-tab" data-toggle="tab"
+                            href="javascript:void(0)" (click)="onTab('1')" [ngClass]="{'active': MesTontines}">Mes Tontines</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" id="Employee-tab" data-toggle="tab"
+                            href="javascript:void(0)" (click)="onTab('2')" [ngClass]="{'active': MesParticipations}">Mes Participations</a>
+                    </li>
+                </ul>
+                <!-- Bouton pour ouvrir le modal d'historique de tirage -->
+                <div class="header-action mt-10 float-right">
+                    <button type="button" class="btn btn-primary" (click)="historiqueTirage(historique)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        Historique Tirages
+                    </button> &nbsp;
+                    <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tirages -->
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tontines" [ngClass]="{'show active': MesTontines}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Mes tontines avec tirages en cours</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <!-- Mes tontines -->
+                                <table *ngIf="tontines?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Type de tirage</th>
+                                            <th>Participants actuels</th>
+                                            <th>Montant</th>
+                                            <th>Date de fin</th>
+                                            <th>Descripton</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tontine of tontines">
+                                            <td>{{tontine.nom}}</td>
+                                            <td>Tirage {{tontine.typeTirage}}</td>
+                                            <td>{{tontine.participant.length}} participants</td>
+                                            <td>{{tontine.montant}} Francs</td>
+                                            <td>{{tontine.dateFin}}</td>
+                                            <td>{{tontine.description}}</td>
+                                            <td>
+                                                <button class="btn btn-secondary mr-2"
+                                                    (click)="tirageTontine(tirage, tontine)">Effectuer Tirage
+                                                </button>
+                                                <!-- Chercher apres une methode pour ca -->
+                                                <!--  *ngIf="!isDisabledMines(tontine); else itIs" -->
+                                                <!-- <ng-template #itIs><p style="color: green;">Tirage déjà effectué !</p></ng-template> -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="tontines?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading text-center">PAS DE TIRAGES DANS VOS TONTINES AUJOURD'HUI !</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Les autres tontines -->
+                <div class="tab-pane fade" id="others" [ngClass]="{'show active': MesParticipations}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Mes participations avec tirages en cours</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <!-- Autres tontines dont je fais parti -->
+                                <table *ngIf="tontinesParticipations?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Type de tirage</th>
+                                            <th>Participants actuels</th>
+                                            <th>Montant</th>
+                                            <th>Date de fin</th>
+                                            <th>Descripton</th>
+                                            <th>Propriétaire</th>
+                                            <!-- <th></th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tontine of tontinesParticipations">
+                                            <td>{{tontine.nom}}</td>
+                                            <td>Tirage par {{tontine.typeTirage}}</td>
+                                            <td>{{tontine.participant.length}} participants</td>
+                                            <td>{{tontine.montant}} Francs</td>
+                                            <td>{{tontine.dateFin}}</td>
+                                            <td>{{tontine.description}}</td>
+                                            <td>{{tontine.proprietaire.prenom}} {{tontine.proprietaire.nom}}</td>
+                                            <!-- <td>
+                                                <p *ngIf="isShown(tontine); else notNow" style="color: green;">Tirage effectué !</p>
+                                                <ng-template #notNow><p style="color: red;">Tirage non encore effectué !</p></ng-template>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="tontinesParticipations?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading text-center">PAS DE TIRAGES DANS LES AUTRES TONTINES AUJOURD'HUI !</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal pour les tirages -->
+<ng-template #tirage>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; width: 100%;">Effectuer un tirage</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="main-card card text-dark bg-light">
+            <!-- <div class="card-header">
+            </div> --><br>
+            <h4 class="card-title text-center">Personnes participant à ce tirage</h4>
+            <div class="text-center">
+                <h6 *ngFor="let participant of participantsTontine" class="card-text">{{participant.prenom}} {{participant.nom}}</h6>
+            </div>
+            <br>
+            <div class="card-body">
+                <!-- Div pour le tirage aleatoire -->
+                <div *ngIf="tontineSelect.typeTirage == 'Aleatoire'" style="background-color: aliceblue;">
+                    <carousel [hidden]="hidden" [isAnimated]="true">
+                        <slide *ngFor="let participant of participantsTontine">
+                            <h4 class="card-text text-center">{{participant.prenom}} {{participant.nom}}</h4>
+                        </slide>
+                    </carousel>
+                    <h3 id="sorti" class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></h3>
+                    <button id="aleatoire" [disabled]="isDisabled" (click)="tirageAleatiore()" class="btn btn-primary btn-block">Commencer</button>
+                </div>
+                <!-- Div pour le tirage par ordre -->
+                <div *ngIf="tontineSelect.typeTirage == 'OrdreArrivee'">
+                    <h4 class="card-title text-center">La prochaine personne qui retire est :</h4>
+                    <h3 class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        {{ordre}}
+                    </h3>
+                </div>
+                <div *ngIf="tontineSelect.typeTirage == 'Choix'">
+                    <form (ngSubmit)="choixFait()" #choix="ngForm">
+                      <h2 class="text-center">Choisir la prochaine personne à retirer</h2>
+                      <select name="participant" id="participant" class="form-control" [(ngModel)]="participantChoix" style="height: 38px; width: 100%;" required>
+                        <option *ngFor="let part of participantsTontine" value="{{part}}">{{part.prenom}} {{part.nom}}</option>
+                      </select><br><br>
+                      <button [disabled]="choix.invalid" class="btn btn-success btn-block ml-auto mr-auto" type="submit">Valider</button>
+                    </form>
+                    <div>
+                      <h3 id="choix" class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour l'historique des tirages -->
+<ng-template #historique>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; width: 100%;">Historique tirages</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <h4 class="card-title text-center">Tontines</h4>
+            <table *ngIf="toutesTontines.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Nombre de participants</th>
+                        <th>Montant</th>
+                        <th>Période tirage</th>
+                        <th>Date fin</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tontine of toutesTontines">
+                        <td>{{tontine.nom}}</td>
+                        <td>{{tontine.nombrePart}} participants</td>
+                        <td>{{tontine.montant}} Francs</td>
+                        <td class="text-center">{{tontine.tirage}}</td>
+                        <td>{{tontine.dateFin}}</td>
+                        <td>{{tontine.description}}</td>
+                        <td><button class="btn btn-info" (click)="detailsHist(det, tontine)">Détails</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><br>
+        <div *ngIf="toutesTontines.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+            <div class="alert alert-info" role="alert">
+              <h4 class="alert-heading text-center">AUCUNE TONTINE DONT VOUS FAITES PARTIE.</h4>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="col-md-12" style="margin: 20px;">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" data-dismiss="modal">Fermer</button>
+    </div>
+</ng-template>
+
+<!-- Modal des details de l'historique des tontines -->
+<ng-template #det>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="text-align: center; width: 100%;">Détails</h5>
+        <button type="button" (click)="modalRefChild.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <h4 class="card-title text-center">Tirages</h4>
+            <table *ngIf="tirages.length != 0" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nom personne</th>
+                        <th>Email personne</th>
+                        <th>Montant</th>
+                        <th>Date et heure de tirage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tirage of tirages">
+                        <td>{{tirage.nomRetire}}</td>
+                        <td>{{tirage.emailRetire}}</td>
+                        <td>{{tirage.montant}}</td>
+                        <td>{{tirage.dateTirage}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="tirages.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading text-center">AUCUN TIRAGE EFFECTUE.</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="col-md-12" style="margin: 20px;">
+        <button type="button" class="btn btn-secondary" (click)="modalRefChild.hide()" data-dismiss="modal">Fermer</button>
+    </div>
+</ng-template>

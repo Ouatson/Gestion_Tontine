@@ -1,0 +1,13 @@
+.cont img{
+    width: 100%;
+}
+
+.cont {
+    height: 500px;
+    margin: 0 auto;
+}
+.cont img.wide {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+}

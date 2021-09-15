@@ -1,0 +1,690 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-md-end align-items-center mb-3">
+                <!-- Bouton pour ouvrir le modal d'ajout de tontine -->
+                <div class="header-action mt-10 float-right">
+                    <button type="button" class="btn btn-primary" (click)="ajoutModal(ajout)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        <i class="fe fe-plus mr-2"></i>Nouvelle tontine
+                    </button> &nbsp;
+                    <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+            <!-- Informations sur les tontines (statut et nombre) -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Nombre total de Tontines</span><br>
+                                <span *ngIf="tontines.length != 0; else mines">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontines.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #mines><h5>Aucune tontine créée</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines terminées</span><br>
+                                <span *ngIf="tontinesTermines.length != 0; else termine">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesTermines.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #termine><h5>Aucune tontine terminée</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines en cours</span><br>
+                                <span *ngIf="tontinesEnCours.length != 0; else encours">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesEnCours.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #encours><h5>Aucune tontine en cours</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines incomplètes</span><br>
+                                <span *ngIf="tontinesIncompletes.length != 0; else incomplete">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesIncompletes.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #incomplete><h5>Aucune tontine incomplète</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tableau sur les tontines que j'ai cree -->
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="Employee-list" [ngClass]="{'show active': EmpAllTab}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tontines</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchTontines(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." autocomplete="off" name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-vcenter text-nowrap mb-0" *ngIf="tontines?.length != 0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Nombre participants</th>
+                                            <th>Participants actuels</th>
+                                            <th>Montant par participants</th>
+                                            <th>Date de début</th>
+                                            <th>Date de fin</th>
+                                            <th>Descripton</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tontine of tontines">
+                                            <td class="d-flex">{{tontine.nom}}</td>
+                                            <td class="text-center"><span>{{tontine.nombrePart}} attendus</span></td>
+                                            <td class="text-center"><span>{{tontine.participant.length}} participants</span></td>
+                                            <td>{{tontine.montant}} Francs</td>
+                                            <td>{{tontine.dateDebut}}</td>
+                                            <td>{{tontine.dateFin}}</td>
+                                            <td>{{tontine.description}}</td>
+                                            <td>
+                                                <button type="button" (click)="details(detail, tontine)" class="btn btn-icon btn-sm" title="Détails">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button [hidden]="notPosiblle(tontine.dateDebut)" type="button" (click)="modifModal(mod, tontine)" class="btn btn-icon btn-sm" title="Modifier">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button type="button" (click)="partModal(participants, tontine)" class="btn btn-icon btn-sm" title="Liste de participants">
+                                                    <i class="fa fa-list"></i>
+                                                </button>
+                                                <button [hidden]="notPosiblle(tontine.dateDebut)" type="button" (click)="supAlert(tontine.id)"
+                                                    class="btn btn-icon btn-sm js-sweetalert" title="Supprimer"
+                                                    data-type="confirm">
+                                                    <i class="fa fa-trash-o text-danger"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="tontines?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <h4 class="alert-heading">PAS DE TONTINES !</h4>
+                                        <p>VOUS N'AVEZ PAS CREE DE TONTINES.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal pour les details -->
+<ng-template #detail>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Détails</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="main-card card text-dark bg-light">
+            <div class="card-header">
+                <h5 class="card-title" style="text-align: center; width: 100%;">Détails de votre tontine</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-center">{{tontineSelect.nom}}</h5>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Code de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.code}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Créée par</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{user.prenom}} {{user.nom}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre maximum de participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.nombrePart}} attendus</p></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre de participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.participant.length}} participants</p></td>
+                        </tr>
+                        <tr>
+                            <td>Montant par participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.montant}} Francs CFA</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date de debut de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.dateDebut}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date de fin de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.dateFin}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Tirage effectué :</td>
+                            <td><p style="margin-left: 100px;" class="card-text">Tous les {{tontineSelect.periodicite}} {{tontineSelect.tirage}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Type de tirage</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.typeTirage}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date prochaine de tirage</td>
+                            <td><p style="margin-left: 100px;" id="dateS" class="card-text"></p></td>
+                        </tr>
+                        <tr>
+                            <td>Description de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.description}}</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal d'ajout de tontine -->
+<ng-template #ajout>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Ajouter une Tontine</h5>
+        <button id="fermeture" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Nouvelle tontine</h5>
+                    <form novalidate (ngSubmit)="nouvelleTontine(nouv)" #nouv="ngForm">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="nomTontine">Nom de la tontine</label>
+                                <input name="nom" [(ngModel)]="tontine.nom" id="nomTontine" placeholder="Titre de tontine" type="text"
+                                    class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nombre">Nombre de participants</label>
+                                <input name="nombrePart" [(ngModel)]="tontine.nombrePart" id="nombrePart"
+                                    placeholder="Nombre de participants" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="montant">Montant par personnes</label>
+                                <input name="montant" [(ngModel)]="tontine.montant" id="montant" placeholder="Montant par participants"
+                                    type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 20px;">
+                                <label for="tirage"><span>Tirage par...</span></label><br>
+                                <select id="tirage" name="tirage" [(ngModel)]="tontine.tirage" style="height: 36px;" required
+                                    placeholder="d.ff">
+                                    <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                    <option value="Jours">Jours</option>
+                                    <option value="Semaines">Semaines</option>
+                                    <option value="Mois">Mois</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 20px;">
+                                <label for="typeTirage">Type de tirage</label>
+                                <select id="typeTirage" name="typeTirage" [(ngModel)]="tontine.typeTirage" style="height: 36px;"
+                                    required placeholder="d.ff">
+                                    <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                    <option value="OrdreArrivee">Par ordre d'insertion</option>
+                                    <option value="Aleatoire">Aleatoire</option>
+                                    <option value="Choix">Definir propre choix</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 20px;">
+                                <label for="periodicite">Periode tirage choisi</label>
+                                <input name="periodicite" [(ngModel)]="tontine.periodicite" id="periodicite" placeholder="Periodicite"
+                                    type="number" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="dateDebut">Date de debut (jour tirage)</label>
+                                <input name="dateDebut" [(ngModel)]="tontine.dateDebut" dateDebut #dateDebutvar="ngModel"
+                                    min="{{today}}" id="dateDebut" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="dateFin">Date de fin</label>
+                                <input name="dateFin" [(ngModel)]="tontine.dateFin" dateFin #dateFinvar="ngModel" min="{{today}}"
+                                    id="dateFin" type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <label for="description">Description</label><br>
+                                <textarea style="width: 100%;" name="description" [(ngModel)]="tontine.description" id="description"
+                                    class="form-control" cols="30" rows="10"></textarea>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="prb">Personne à contacter en cas de problème</label>
+                                <input id="prb" name="probleme" type="text" class="form-control" required
+                                    placeholder="Nom de la personne" [(ngModel)]="moiPart.probleme">
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="telprb">Numéro de téléphone de la personne</label>
+                                <input id="telprb" name="telprobleme" type="tel" class="form-control" required
+                                    placeholder="77 123 45 67" [(ngModel)]="moiPart.telprobleme" #telproblemevar="ngModel"
+                                    pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                                    [ngClass]="{'is-invalid': (telproblemevar.touched && !telproblemevar.valid)}">
+                                <small class="invalid-feedback">
+                                    <span *ngIf="telproblemevar.errors?.required">
+                                        Entrez son numéro de téléphone
+                                    </span>
+                                    <span *ngIf="telproblemevar.errors?.pattern">
+                                        Entrez un numéro de téléphone valide
+                                    </span>
+                                </small>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" data-dismiss="modal">Fermer</button>
+                                <button [disabled]="nouv.invalid" class="btn btn-success float-right " type="submit">Enregister</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour la modification de tontine -->
+<ng-template #mod>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Modifier une Tontine</h5>
+        <button id="fermM" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body"><h5 class="card-title text-center">Modification tontine</h5>
+                <form novalidate (ngSubmit)="modifierTontine(mod)" #mod="ngForm">
+                    <div class="form-row">
+                        <input type="hidden" name="id" ngModel={{tontineSelect.id}} class="form-control" required>
+                        <input type="hidden" name="code" ngModel={{tontineSelect.code}} class="form-control" required>
+                        <div class="col-md-6">
+                            <label for="nomTontine">Nom de la tontine</label>
+                            <input name="nom" [(ngModel)]="tontineSelect.nom" ngModel={{tontineSelect.nom}} id="nomTontine" placeholder="Titre de tontine" type="text" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nombre">Nombre de participants</label>
+                            <input name="nombrePart" [(ngModel)]="tontineSelect.nombrePart" ngModel={{tontineSelect.nombrePart}} id="nombrePart" placeholder="Nombre de participants" type="number" class="form-control" required>
+                        </div>
+                        <div class="col-md-6" style="margin-top: 20px;">
+                            <label for="montant">Montant par personnes</label>
+                            <input name="montant" [(ngModel)]="tontineSelect.montant" ngModel={{tontineSelect.montant}} id="montant" placeholder="Montant par participants" type="number" class="form-control" required>
+                        </div>
+                        <div class="col-md-2" style="margin-top: 20px;">
+                            <label for="tirage"><span>Tirage par...</span></label><br>
+                            <select id="tirage" name="tirage" [(ngModel)]="tontineSelect.tirage" ngModel={{tontineSelect.tirage}} style="height: 36px;" required placeholder="d.ff">
+                                <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                <option value="Jours">Jours</option>
+                                <option value="Semaines">Semaines</option>
+                                <option value="Mois">Mois</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="margin-top: 20px;">
+                            <label for="typeTirage">Type de tirage</label>
+                            <select id="typeTirage" name="typeTirage" [(ngModel)]="tontineSelect.typeTirage" ngModel={{tontineSelect.typeTirage}} style="height: 36px;" required placeholder="d.ff">
+                                <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                <option value="OrdreArrivee">Par ordre d'insertion</option>
+                                <option value="Aleatoire">Aleatoire</option>
+                                <option value="Choix">Definir propre choix</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="margin-top: 20px;">
+                            <label for="periodicite">Periode tirage choisi</label>
+                            <input name="periodicite" [(ngModel)]="tontineSelect.periodicite" ngModel={{tontineSelect.periodicite}} id="periodicite" placeholder="Periodicite" type="number" class="form-control" required>
+                        </div>
+                        <div class="col-md-6" style="margin-top: 20px;">
+                            <label for="dateDebut">Date de debut</label>
+                            <input name="dateDebut" [(ngModel)]="tontineSelect.dateDebut" ngModel={{tontineSelect.dateDebut}} dateDebut #dateDebutvar="ngModel" min="{{today}}"
+                             id="dateDebut" type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6" style="margin-top: 20px;">
+                            <label for="dateFin">Date de fin</label>
+                            <input name="dateFin" [(ngModel)]="tontineSelect.dateFin" ngModel={{tontineSelect.dateFin}} dateFin #dateFinvar="ngModel" min="{{today}}"
+                             id="dateFin" type="date" class="form-control" required>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <label for="description">Description</label><br>
+                            <textarea style="width: 100%;" name="description" [(ngModel)]="tontineSelect.description" ngModel={{tontineSelect.description}} id="description" class="form-control" cols="30" rows="10"></textarea>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" data-dismiss="modal">Fermer</button>
+                            <button [disabled]="mod.invalid" class="btn btn-success float-right " type="submit">Enregister</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal des participants -->
+<ng-template #participants>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Liste des participants</h5>
+        <button id="fermP" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <button [disabled]="nombrePart == participantsTontine.length" class="btn btn-success float-right" (click)="ajoutPart(partAjout)">
+                Ajouter participant
+            </button>
+        </div>
+        <div>
+            <ul class="nav nav-tabs page-header-tab center">
+                <li class="nav-item">
+                    <a class="nav-link"
+                     id="tabListPart" 
+                     data-toggle="tab" 
+                     href="javascript:void(0)" 
+                     (click)="onTab('1')" 
+                     [ngClass]="{'active': Part}"
+                    >
+                        Participants
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                     id="tabListPartRet" 
+                     data-toggle="tab" 
+                     href="javascript:void(0)" 
+                     (click)="onTab('2')" 
+                     [ngClass]="{'active': PartRet}"
+                    >
+                        Participants ayant retiré
+                    </a>
+                </li>
+            </ul>
+            <div class="container-fluid">
+                <div class="tab-content">
+                    <!-- Participants -->
+                    <div class="tab-pane fade" id="listPart" [ngClass]="{'show active': Part}" role="tabpanel">
+                        <h5 class="card-title text-center">Participants</h5>
+                        <div *ngIf="participantsTontine.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading text-center">Aucun particpants dans cette tontine.</h4>
+                                <p>Veuillez ajouter des participants svp avant le {{tontineSelect.dateDebut}}!</p>
+                            </div>
+                        </div>
+                        <table *ngIf="participantsTontine.length != 0" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prénom Nom Email</th>
+                                    <th>Date Naissance</th>
+                                    <th>Adresse</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Sexe</th>
+                                    <th>Status matrimonial</th>
+                                    <th>Personne contacter</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let participant of participantsTontine">
+                                    <td class="d-flex">
+                                        <div class="ml-3">
+                                            <h6 class="mb-0">{{participant.prenom}} {{participant.nom}}</h6>
+                                            <span class="text-muted">{{participant.email}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{participant.dateNaiss}}</td>
+                                    <td>{{participant.adresse}}</td>
+                                    <td>{{participant.numTel}}</td>
+                                    <td>{{participant.profession}}</td>
+                                    <td>{{participant.sexe}}</td>
+                                    <td>{{participant.status_matrimonial}}</td>
+                                    <td>{{participant.probleme}}:<br> {{participant.telprobleme}}</td>
+                                    <td><button [disabled]="participant.email == user.email" class="btn btn-danger" (click)="suppress(participant.id)">Supprimer</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Participants ayant retire -->
+                    <div class="tab-pane fade" id="listPartRet" [ngClass]="{'show active': PartRet}" role="tabpanel">
+                        <h5 class="card-title text-center">Participants ayant retiré</h5>
+                        <div *ngIf="participantsRetire.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading text-center">Aucun particpants n'a retiré dans cette tontine.</h4>
+                            </div>
+                        </div>
+                        <table *ngIf="participantsRetire.length != 0" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prénom Nom Email</th>
+                                    <th>Date Naissance</th>
+                                    <th>Adresse</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Sexe</th>
+                                    <th>Status matrimonial</th>
+                                    <th>Personne a contacter</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let participant of participantsRetire">
+                                    <td class="d-flex">
+                                        <div class="ml-3">
+                                            <h6 class="mb-0">{{participant.prenom}} {{participant.nom}}</h6>
+                                            <span class="text-muted">{{participant.email}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{participant.dateNaiss}}</td>
+                                    <td>{{participant.adresse}}</td>
+                                    <td>{{participant.numTel}}</td>
+                                    <td>{{participant.profession}}</td>
+                                    <td>{{participant.sexe}}</td>
+                                    <td>{{participant.status_matrimonial}}</td>
+                                    <td>{{participant.probleme}}:<br> {{participant.telprobleme}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour l'ajout de participants -->
+<ng-template #partAjout>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Ajout participant</h5>
+        <button id="fermAP" type="button" (click)="modalRefChild.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form novalidate (ngSubmit)="ajouterParticipant(partForm)" #partForm="ngForm">
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="nom">Nom <span style="color: red;">*</span></label>
+                    <input id="nom" name="nom" type="text" class="form-control" required aria-required="true"
+                        placeholder="Nom" [(ngModel)]="participant.nom" #nomvar="ngModel"
+                        [ngClass]="{'is-invalid': nomvar.touched && !nomvar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="nomvar.errors?.required">
+                            Entrez votre nom
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="prenom">Prénom <span style="color: red;">*</span></label>
+                    <input id="prenom" name="prenom" type="text" class="form-control" required aria-required="true"
+                        placeholder="Prenom" [(ngModel)]="participant.prenom" #prenomvar="ngModel"
+                        [ngClass]="{'is-invalid': prenomvar.touched && !prenomvar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="prenomvar.errors?.required">
+                            Entrez votre prénom
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email">Email <span style="color: red;">*</span></label>
+                    <input id="email" name="email" email type="email" class="form-control" required aria-required="true"
+                        placeholder="Email" [(ngModel)]="participant.email" email #emailvar="ngModel"
+                        [ngClass]="{'is-invalid': emailvar.touched && !emailvar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="emailvar.errors?.required">
+                            Entrez votre email
+                        </span>
+                        <span *ngIf="emailvar.errors?.email">
+                            Entrez un email valide
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="dateNaiss">Date de naissance <span style="color: red;">*</span></label>
+                    <input id="dateNaiss" name="dateNaiss" type="date" class="form-control" required aria-required="true"
+                        [(ngModel)]="participant.dateNaiss" #dateNaissvar="ngModel"
+                        [ngClass]="{'is-invalid': dateNaissvar.touched && !dateNaissvar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="dateNaissvar.errors">
+                            Choisissez une date de naissance valide
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="adresse">Adresse <span style="color: red;">*</span></label>
+                    <input id="adresse" name="adresse" type="text" class="form-control" required aria-required="true"
+                        placeholder="Adresse" [(ngModel)]="participant.adresse" #adressevar="ngModel"
+                        [ngClass]="{'is-invalid': adressevar.touched && !adressevar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="adressevar.errors?.required">
+                            Entrez votre adresse
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="numTel">Numéro de téléphone <span style="color: red;">*</span></label>
+                    <input id="numTel" name="numTel" type="tel" class="form-control" required aria-required="true"
+                        placeholder="77 123 45 67" [(ngModel)]="participant.numTel" #numTelvar="ngModel"
+                        pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                        [ngClass]="{'is-invalid': numTelvar.touched && !numTelvar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="numTelvar.errors?.required">
+                            Entrez votre numéro de téléphone
+                        </span>
+                        <span *ngIf="numTelvar.errors?.pattern">
+                            Entrez un numéro de téléphone valide
+                        </span>
+                    </small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="profession">Profession <span style="color: red;">*</span></label>
+                    <input id="profession" name="profession" type="text" class="form-control" required aria-required="true"
+                        placeholder="Profession" [(ngModel)]="participant.profession" #professionvar="ngModel"
+                        [ngClass]="{'is-invalid': professionvar.touched && !professionvar.valid}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Sexe <span style="color: red;">*</span></label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input id="masculin" name="sexe" type="radio" value="Masculin" [(ngModel)]="participant.sexe" checked>
+                            <label for="masculin">&nbsp;Masculin</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="feminin" name="sexe" type="radio" value="Feminin" [(ngModel)]="participant.sexe">
+                            <label for="feminin">&nbsp;Féminin</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Statut matrimonial <span style="color: red;">*</span></label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input id="célibataire" name="status_matrimonial" type="radio" value="Célibataire"
+                                [(ngModel)]="participant.status_matrimonial" checked>
+                            <label for="célibataire">&nbsp;Célibataire</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="marié" name="status_matrimonial" type="radio" value="Marié"
+                                [(ngModel)]="participant.status_matrimonial">
+                            <label for="marié">&nbsp;Marié(e)</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="veuf" name="status_matrimonial" type="radio" value="Veuf"
+                                [(ngModel)]="participant.status_matrimonial">
+                            <label for="veuf">&nbsp;Veuf/Veuve</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="divorce" name="status_matrimonial" type="radio" value="Divorcé"
+                                [(ngModel)]="participant.status_matrimonial">
+                            <label for="divorce">&nbsp;Divorcé(e)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mce-divider"></div>
+                <div class="col-md-6 mb-3">
+                    <label for="prb">Personne à contacter en cas de problème <span style="color: red;">*</span></label>
+                    <input id="prb" name="probleme" type="text" class="form-control" required aria-required="true"
+                        placeholder="Nom de la personne" [(ngModel)]="participant.probleme">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="telprb">Numéro de téléphone de la personne <span style="color: red;">*</span></label>
+                    <input id="telprb" name="telprobleme" type="tel" class="form-control" required aria-required="true"
+                        placeholder="77 123 45 67" [(ngModel)]="participant.telprobleme" #telproblemevar="ngModel"
+                        pattern="[0-9]{2} [0-9]{3} [0-9]{2} [0-9]{2}"
+                        [ngClass]="{'is-invalid': telproblemevar.touched && !telproblemevar.valid}">
+                    <small class="invalid-feedback">
+                        <span *ngIf="numTelvar.errors?.required">
+                            Entrez votre numéro de téléphone
+                        </span>
+                        <span *ngIf="numTelvar.errors?.pattern">
+                            Entrez un numéro de téléphone valide
+                        </span>
+                    </small>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <button type="button" class="btn btn-secondary" (click)="modalRefChild.hide()" data-dismiss="modal">Fermer</button>
+                <button [disabled]="partForm.invalid" style="float: right;" type="submit" class="btn btn-success">Sauvegarder</button>
+            </div>
+        </form>
+    </div>
+</ng-template>

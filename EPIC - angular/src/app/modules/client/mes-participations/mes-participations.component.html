@@ -1,0 +1,329 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin mt-10">
+        <div class="container-fluid">
+            <!-- Informations sur les tontines (statut et nombre) -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Nombre total de Tontines</span><br>
+                                <span *ngIf="tontinesParticipations.length != 0; else others">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesParticipations.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #others><h5>Aucune adhération à une tontine</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines terminées</span><br>
+                                <span *ngIf="tontinesTermines.length != 0; else termine">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesTermines.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #termine><h5>Aucune tontine terminée</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines en cours</span><br>
+                                <span *ngIf="tontinesEnCours.length != 0; else encours">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesEnCours.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #encours><h5>Aucune tontine en cours</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body w_sparkline">
+                            <div class="details">
+                                <span>Tontines inachevées</span><br>
+                                <span *ngIf="tontinesIncompletes.length != 0; else incomplete">
+                                    <h3 class="mb-0 counter" [from]="0" [CountTo]="tontinesIncompletes.length" [duration]="1"></h3>
+                                </span>
+                                <ng-template #incomplete><h5>Aucune tontine incomplète</h5></ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tableau sur les tontines que j'ai cree -->
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="Tontines" [ngClass]="{'show active': EmpAllTab}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tontines</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchTontines(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." autocomplete="off" name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table *ngIf="tontinesParticipations?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Nombre participants</th>
+                                            <th>Participants actuels</th>
+                                            <th>Montant/participants</th>
+                                            <th>Date de début</th>
+                                            <th>Date de fin</th>
+                                            <th>Descripton</th>
+                                            <th>Créateur</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tontine of tontinesParticipations">
+                                            <td class="d-flex">{{tontine.nom}}</td>
+                                            <td class="text-center"><span>{{tontine.nombrePart}} attendus</span></td>
+                                            <td class="text-center"><span>{{tontine.participant.length}} participants</span></td>
+                                            <td>{{tontine.montant}} Francs</td>
+                                            <td>{{tontine.dateDebut}}</td>
+                                            <td>{{tontine.dateFin}}</td>
+                                            <td>{{tontine.description}}</td>
+                                            <td>{{tontine.proprietaire.prenom}} {{tontine.proprietaire.nom}}</td>
+                                            <td>
+                                                <button type="button" (click)="details(detail, tontine)" class="btn btn-icon btn-sm" title="Détails">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button type="button" (click)="partModal(participants, tontine)" class="btn btn-icon btn-sm" title="Liste de participants">
+                                                    <i class="fa fa-list"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="tontinesParticipations?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <h4 class="alert-heading">PAS DE PARTICIPATION A UNE TONTINE !</h4>
+                                        <p>VOUS N'ADDHEREZ PAS ENCORE A LA TONTINES D'AUTRUI.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> &nbsp;
+                    <button type="button" class="btn btn-default float-right" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal pour les details -->
+<ng-template #detail>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Détails</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="main-card card text-dark bg-light">
+            <div class="card-header">
+                <h5 class="card-title" style="text-align: center; width: 100%;">Détails de votre tontine</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-center">{{tontineSelect.nom}}</h5>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Code de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.code}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Créée par</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{user.prenom}} {{user.nom}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre maximum de participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.nombrePart}} attendus</p></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre de participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.participant.length}} participants</p></td>
+                        </tr>
+                        <tr>
+                            <td>Montant par participants</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.montant}} Francs CFA</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date de debut de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.dateDebut}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date de fin de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.dateFin}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Tirage effectué :</td>
+                            <td><p style="margin-left: 100px;" class="card-text">Tous les {{tontineSelect.periodicite}} {{tontineSelect.tirage}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Type de tirage</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.typeTirage}}</p></td>
+                        </tr>
+                        <tr>
+                            <td>Date prochaine de tirage</td>
+                            <td><p style="margin-left: 100px;" id="dateS" class="card-text"></p></td>
+                        </tr>
+                        <tr>
+                            <td>Description de la tontine</td>
+                            <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.description}}</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal des participants -->
+<ng-template #participants>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Liste des participants</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <ul class="nav nav-tabs page-header-tab center">
+                <li class="nav-item">
+                    <a class="nav-link"
+                     id="tabListPart" 
+                     data-toggle="tab" 
+                     href="javascript:void(0)" 
+                     (click)="onTab('1')" 
+                     [ngClass]="{'active': Part}"
+                    >
+                        Participants
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                     id="tabListPartRet" 
+                     data-toggle="tab" 
+                     href="javascript:void(0)" 
+                     (click)="onTab('2')" 
+                     [ngClass]="{'active': PartRet}"
+                    >
+                        Participants ayant retiré
+                    </a>
+                </li>
+            </ul>
+            <div class="container-fluid">
+                <div class="tab-content">
+                    <!-- Participants -->
+                    <div class="tab-pane fade" id="listPart" [ngClass]="{'show active': Part}" role="tabpanel">
+                        <h5 class="card-title text-center">Participants</h5>
+                        <div *ngIf="participantsTontine.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                            <div class="alert alert-warning" role="alert">
+                                <h4 class="alert-heading">Aucun particpants dans cette tontine.</h4>
+                            </div>
+                        </div>
+                        <table *ngIf="participantsTontine.length != 0" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prénom Nom Email</th>
+                                    <th>Date de Naissance</th>
+                                    <th>Addresse</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Sexe</th>
+                                    <th>Status matrimonial</th>
+                                    <th>Personne contacter</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let participant of participantsTontine">
+                                    <td class="d-flex">
+                                        <div class="ml-3">
+                                            <h6 class="mb-0">{{participant.prenom}} {{participant.nom}}</h6>
+                                            <span class="text-muted">{{participant.email}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{participant.dateNaiss}}</td>
+                                    <td>{{participant.adresse}}</td>
+                                    <td>{{participant.numTel}}</td>
+                                    <td>{{participant.profession}}</td>
+                                    <td>{{participant.sexe}}</td>
+                                    <td>{{participant.status_matrimonial}}</td>
+                                    <td>{{participant.probleme}}:<br> {{participant.telprobleme}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Participants ayant retire -->
+                    <div class="tab-pane fade" id="listPartRet" [ngClass]="{'show active': PartRet}" role="tabpanel">
+                        <h5 class="card-title text-center">Participants ayant retiré</h5>
+                        <div *ngIf="participantsRetire.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">Aucun particpants n'a retiré dans cette tontine.</h4>
+                            </div>
+                        </div>
+                        <table *ngIf="participantsRetire.length != 0" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Prénom Nom Email</th>
+                                    <th>Date de Naissance</th>
+                                    <th>Addresse</th>
+                                    <th>Téléphone</th>
+                                    <th>Profession</th>
+                                    <th>Sexe</th>
+                                    <th>Status matrimonial</th>
+                                    <th>Personne à contacter</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let participant of participantsRetire">
+                                    <td class="d-flex">
+                                        <div class="ml-3">
+                                            <h6 class="mb-0">{{participant.prenom}} {{participant.nom}}</h6>
+                                            <span class="text-muted">{{participant.email}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{participant.dateNaiss}}</td>
+                                    <td>{{participant.adresse}}</td>
+                                    <td>{{participant.numTel}}</td>
+                                    <td>{{participant.profession}}</td>
+                                    <td>{{participant.sexe}}</td>
+                                    <td>{{participant.status_matrimonial}}</td>
+                                    <td>{{participant.probleme}}:<br> {{participant.telprobleme}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

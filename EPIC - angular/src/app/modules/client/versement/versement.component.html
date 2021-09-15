@@ -1,0 +1,202 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <!-- Tableau des tontines -->
+    <div class="section-body mt-10">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tontines" [ngClass]="{'show active': EmpAllTab}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tontines</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchTontines(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." autocomplete="off" name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Nombre participants</th>
+                                            <th>Participants actuels</th>
+                                            <th>Montant par participants</th>
+                                            <th>Date de début</th>
+                                            <th>Date de fin</th>
+                                            <th>Descripton</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let tontine of tontines">
+                                            <td>{{tontine.nom}}</td>
+                                            <td style="text-align: center;">{{tontine.nombrePart}} attendus</td>
+                                            <td style="text-align: center;">{{tontine.participant.length}} participants</td>
+                                            <td style="text-align: center;">{{tontine.montant}} Francs</td>
+                                            <td>{{tontine.dateDebut}}</td>
+                                            <td>{{tontine.dateFin}}</td>
+                                            <td>{{tontine.description}}</td>
+                                            <td style="text-align: center;">
+                                                <button class="btn btn-info" (click)="partTontine(participants, tontine)">Participations</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="tontines?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <h4 class="alert-heading text-center">PAS DE TONTINES !</h4>
+                                        <p class="text-center">VOUS N'AVEZ PAS CREE DE TONTINES.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> &nbsp;
+                    <button type="button" class="btn btn-default float-right" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal de liste des participants pour les tontines selectionnees -->
+<ng-template #participants>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Liste des participants</h5>
+        <button type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <h2 class="text-center">Participants</h2>
+            <table *ngIf="participantsTontine.length != 0" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Prénom Nom Email</th>
+                        <th>Telephone</th>
+                        <th>Sexe</th>
+                        <th>Montant</th>
+                        <th>Date dernier versement</th>
+                        <th>Retiré</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let participant of participantsTontine">
+                        <!-- <td><button [disabled]="participant.email != user.email" class="btn btn-success" (click)="virement(virementModal, participant)">Virement</button></td> -->
+                        <td class="d-flex">
+                            <div class="ml-3">
+                                <h6 class="mb-0">{{participant.prenom}} {{participant.nom}}</h6>
+                                <span class="text-muted">{{participant.email}}</span>
+                            </div>
+                        </td>
+                        <td>{{participant.numTel}}</td>
+                        <td>{{participant.sexe}}</td>
+                        <td> <span *ngIf="participant.mise_montant!=null;else montNull">{{participant.mise_montant}} Francs</span> <ng-template #montNull>0 Francs</ng-template> </td>
+                        <td> <span *ngIf="participant.date_versement!=null;else dateNull">{{participant.date_versement}}</span> <ng-template #dateNull>Pas encore de versement</ng-template> </td>
+                        <td> <span *ngIf="participant.tirage;else templateName">&#10004;</span> <ng-template #templateName>&#10008;</ng-template> </td>
+                        <td>
+                            <button [hidden]="participant.email != user.email" class="btn btn-success mr-10" (click)="virement(virementModal, participant)">Versement</button>
+                            <button class="btn btn-info" (click)="historique(details, participant)">Historique</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalRef.hide()" data-dismiss="modal">Fermer</button>
+    </div>
+</ng-template>
+
+<!-- Modal pour effectuer les virements -->
+<ng-template #virementModal>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Effectuer un versement</h5>
+        <button id="fermVirement" type="button" (click)="modalRefChild.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="main-card card">
+            <div class="card-body">
+                <form novalidate (ngSubmit)="ajouterVirement(ajouterSomme)" #ajouterSomme="ngForm">
+                    <div class="form-row">
+                        <div>
+                            <label for="operateur">Choisir le mode de paiement</label><br>
+                            <select id="operateur" name="operateur" [(ngModel)]="versement.operateur" style="height: 38px; width: 300px;" required placeholder="d.ff">
+                                <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                <option value="OrangeMoney">Orange Money</option>
+                                <option value="FreeMoney">Free Money</option>
+                                <option value="Wari">Wari</option>
+                                <option value="CarteBancaire">Carte Bancaire</option>
+                                <option value="Wave">Wave</option>
+                            </select>
+                        </div>
+                        <div class="ml-5">
+                            <label for="montant">Entrez le montant à verser</label>
+                            <input id="montant" name="montant" type="number" class="form-control" required
+                                placeholder="Montant de la mise" [(ngModel)]="versement.montant">
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-secondary" (click)="modalRefChild.hide()" data-dismiss="modal">Fermer</button>
+                    <button [disabled]="ajouterSomme.invalid" type="submit" class="btn btn-success float-right">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour l'historique des virements et actions parralelles -->
+<ng-template #details>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Historique des versements</h5>
+        <button type="button" (click)="modalRefChild.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table *ngIf="versements.length != 0" class="table table-striped table-hover table-vcenter text-nowrap mb-0">
+                    <thead>
+                        <tr>
+                            <th>Montant du versement</th>
+                            <th>Opérateur</th>
+                            <th>Date du versement</th>
+                            <th [hidden]="participantSelect.email != user.email">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let versement of versements">
+                            <td>{{versement.montant}} Francs</td>
+                            <td>{{versement.operateur}}</td>
+                            <td>{{versement.date}}</td>
+                            <td><button [hidden]="participantSelect.email != user.email" class="btn btn-danger" (click)="suppress(versement)">Retirer</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="versements?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading text-center">PAS DE VERSEMENT DANS CETTE TONTINE !</h4>
+                        <p class="text-center">AUCUN VERSEMENT EFFECTUE.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

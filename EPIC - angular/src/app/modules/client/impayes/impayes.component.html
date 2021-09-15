@@ -1,0 +1,183 @@
+<app-leftmenu></app-leftmenu>
+<!-- Main body part  -->
+<div class="page">
+    <app-header></app-header>
+    <div class="section-body fixNavMargin">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-md-end align-items-center mb-3">
+                <!-- Bouton pour ouvrir le modal d'ajout de tontine -->
+                <div class="header-action mt-10 float-right">
+                    <button type="button" class="btn btn-primary" (click)="ajoutModal(ajout)" data-toggle="modal"
+                        data-target="#exampleModal">
+                        <i class="fe fe-plus mr-2"></i>Nouvelle déposition
+                    </button> &nbsp;
+                    <button type="button" class="btn btn-default" [routerLink]="['/gt-accueil']">Accueil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tableau des listes de depositions de vols -->
+    <div class="section-body">
+        <div class="container-fluid">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="List-impayes" [ngClass]="{'show active': EmpAllTab}" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dépositions</h3>
+                            <div class="card-options">
+                                <form>
+                                    <div class="input-group">
+                                        <input (ngModelChange)="searchImpaye(key.value)" #key="ngModel" ngModel name="key" id="searchName" type="search" class="form-control form-control-sm"
+                                            placeholder="Recherche..." autocomplete="off" name="s">
+                                        <span class="input-group-btn ml-2">
+                                            <button class="btn btn-icon btn-sm" type="submit">
+                                                <span class="fe fe-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table *ngIf="listImpayes?.length != 0" class="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom tontine</th>
+                                            <th>Opérateur</th>
+                                            <td>Date de déposition</td>
+                                            <th>Descripton</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let impaye of listImpayes">
+                                            <td>{{impaye.tontineNom}}</td>
+                                            <td>{{impaye.operateur}}</td>
+                                            <td>{{impaye.dateDeposition}}</td>
+                                            <td>
+                                                <textarea style="border: none;" name="description" id="description" cols="60" rows="4" readonly>{{impaye.description}}</textarea>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success" (click)="modifDeposition(modif, impaye)">Modifier</button>
+                                                <button class="btn btn-danger ml-2" (click)="supprimerDeposition(impaye.id)">Supprimer</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="listImpayes?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading">PAS DE DEPOSITION D'IMPAYES !</h4>
+                                        <p>VOUS N'AVEZ PAS FAIT DE DEPOSITION.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
+
+<!-- Modal d'ajout de deposition d'impayes -->
+<ng-template #ajout>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Impayes</h5>
+        <button id="fermetureA" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Faire une déposition</h5>
+                    <form (ngSubmit)="soumission(impayes)" #impayes="ngForm">
+                        <div class="form-row">
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
+                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="impaye.tontineId" style="height: 38px; width: 100%;" required>
+                                    <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="operateur">Operateur de retrait</label>
+                                <select id="operateur" name="operateur" [(ngModel)]="impaye.operateur"
+                                    style="height: 38px; width: 100%;" required placeholder="d.ff">
+                                    <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                    <option value="OrangeMoney">Orange Money</option>
+                                    <option value="FreeMoney">Free Money</option>
+                                    <option value="Wari">Wari</option>
+                                    <option value="Banque">Banque</option>
+                                    <option value="Wave">Wave</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <label for="description">Décrivez nous les faits !</label><br>
+                                <textarea style="width: 100%;" name="description" [(ngModel)]="impaye.description" id="description"
+                                    class="form-control" cols="30" rows="10" required></textarea>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <button [disabled]="impayes.invalid" class="btn btn-success btn-block ml-auto mr-auto" style="width: 25%;" type="submit">Envoyer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="status"></div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal de modification de deposition d'impayes -->
+<ng-template #modif>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Impayes</h5>
+        <button id="fermetureM" type="button" (click)="modalRef.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="d-flex justify-content-around">
+            <div class="main-card card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Changer la déposition</h5>
+                    <form (ngSubmit)="modification(mod)" #mod="ngForm">
+                        <div class="form-row">
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <input type="hidden" name="id" ngModel={{impayeSelected.id}} class="form-control" required>
+                                <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
+                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="impayeSelected.tontineId" ngModel={{impayeSelected.tontineId}} style="height: 38px; width: 100%;" required>
+                                    <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 20px;">
+                                <label for="operateur">Operateur de retrait</label>
+                                <select id="operateur" name="operateur" [(ngModel)]="impayeSelected.operateur" ngModel={{impayeSelected.operateur}}
+                                    style="height: 38px; width: 100%;" required>
+                                    <option hidden value="" disabled selected>Veuillez selectionner</option>
+                                    <option value="Banque">Banque Islamique</option>
+                                    <option value="OrangeMoney">Orange Money</option>
+                                    <option value="FreeMoney">Free Money</option>
+                                    <option value="JoniJoni">Joni Joni</option>
+                                    <option value="Wari">Wari</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <label for="description">Décrivez nous les faits !</label><br>
+                                <textarea style="width: 100%;" name="description" [(ngModel)]="impayeSelected.description" ngModel={{impayeSelected.description}} id="description"
+                                    class="form-control" cols="30" rows="10" required></textarea>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <button [disabled]="mod.invalid" class="btn btn-success btn-block ml-auto mr-auto" style="width: 25%;" type="submit">Modifier</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="status"></div>
+            </div>
+        </div>
+    </div>
+</ng-template>
