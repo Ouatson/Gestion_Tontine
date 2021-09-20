@@ -13,7 +13,15 @@ import Swal from 'sweetalert2';
 export class ForgotPasswordComponent implements OnInit {
   email: string;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {
+    const body = document.getElementsByTagName('body')[0];
+    if (sessionStorage.getItem("modeSombre") === null || sessionStorage.getItem("modeSombre") != "") {
+      sessionStorage.setItem("modeSombre", "true");
+      body.classList.add('dark-mode');
+    } else if(sessionStorage.getItem("modeSombre") != null && sessionStorage.getItem("modeSombre") == ""){
+      body.classList.remove('dark-mode');
+    }
+  }
 
   ngOnInit(): void {
   }

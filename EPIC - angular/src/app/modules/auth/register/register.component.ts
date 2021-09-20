@@ -21,7 +21,15 @@ export class RegisterComponent implements OnInit {
   conf;
 
   constructor(private route: Router,
-    private userService: UserService) { }
+    private userService: UserService) {
+      const body = document.getElementsByTagName('body')[0];
+      if (sessionStorage.getItem("modeSombre") === null || sessionStorage.getItem("modeSombre") != "") {
+        sessionStorage.setItem("modeSombre", "true");
+        body.classList.add('dark-mode');
+      } else if(sessionStorage.getItem("modeSombre") != null && sessionStorage.getItem("modeSombre") == ""){
+        body.classList.remove('dark-mode');
+      }
+    }
 
   ngOnInit(): void {
   }

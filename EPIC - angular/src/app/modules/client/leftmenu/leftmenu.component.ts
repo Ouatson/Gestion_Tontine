@@ -25,6 +25,14 @@ export class LeftmenuComponent implements OnInit {
   staticscard: boolean = true;
   friendscard: boolean = true;
   constructor(private router: Router, @Inject(AppComponent) private app: AppComponent) {
+    const body = document.getElementsByTagName('body')[0];
+    if (sessionStorage.getItem("modeSombre") != "") {
+      sessionStorage.setItem("Toggle", "true");
+      body.classList.add('dark-mode');
+    } else {
+      sessionStorage.setItem("Toggle", "");
+      body.classList.remove('dark-mode');
+    }
     if ((this.router.url).includes('gt')) {
       this.isCollapsed = false;
     }
@@ -35,9 +43,6 @@ export class LeftmenuComponent implements OnInit {
     if ((this.router.url).includes('gestion')) {
       this.isProblemeCollapsed = false;
     }
-    // if ((this.router.url).includes('auth')) {
-    //   this.isAuthCollapsed = false;
-    // }
   }
 
   ngOnInit(): void {
@@ -182,10 +187,12 @@ export class LeftmenuComponent implements OnInit {
       if (e.target.checked) {
         this.toggle1 = true;
         sessionStorage.setItem("Toggle", "true");
+        sessionStorage.setItem("modeSombre", "true");
       }
       else {
         this.toggle1 = false;
         sessionStorage.setItem("Toggle", "");
+        sessionStorage.setItem("modeSombre", "");
       }
     }
     else if (type == 2) {

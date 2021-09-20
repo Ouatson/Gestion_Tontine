@@ -18,7 +18,15 @@ export class LoginComponent implements OnInit {
   userConnected = new User();
 
   constructor(private userService: UserService,
-    private route: Router) { }
+    private route: Router) {
+      const body = document.getElementsByTagName('body')[0];
+      if (sessionStorage.getItem("modeSombre") === null || sessionStorage.getItem("modeSombre") != "") {
+        sessionStorage.setItem("modeSombre", "true");
+        body.classList.add('dark-mode');
+      } else if(sessionStorage.getItem("modeSombre") != null && sessionStorage.getItem("modeSombre") === ""){
+        body.classList.remove('dark-mode');
+      }
+    }
 
   ngOnInit(): void {
 
