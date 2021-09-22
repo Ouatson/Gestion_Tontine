@@ -15,6 +15,7 @@ export class User {
     password: string;
     sexe: string;
     status_matrimonial: string;
+    confirmationToken: string;
     tontine: Array<Tontine>
     signals: Array<Signals>;
     vols: Array<Vols>

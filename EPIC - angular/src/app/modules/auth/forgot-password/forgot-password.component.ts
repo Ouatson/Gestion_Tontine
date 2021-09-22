@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { User } from 'src/app/Services/User/user';
 import { UserService } from 'src/app/Services/User/user.service';
 import Swal from 'sweetalert2';
 
@@ -39,19 +38,14 @@ export class ForgotPasswordComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         let email = this.email;
-        this.userService.rechercheUser(email).subscribe(
-          (response: User) => {
-            response.password = "passer123";
-            this.userService.modifier(response).subscribe(
-              (response1: User) => {
-                Swal.fire(
-                  'Mot de passe réinitialisé !',
-                  `Votre nouveau mot de passe est '${response1.password}'.\nVeillez à le changer après connexion !`,
-                  'success'
-                )
-                reinit.reset();
-              }
+        this.userService.oubliPassword(email).subscribe(
+          (response: void) => {
+            Swal.fire(
+              'Vérifiez votre boîte mail !',
+              `Un email a été envoyé à cette adresse pour confirmer votre identité !`,
+              'success'
             )
+            reinit.reset();
           },
           (error: HttpErrorResponse) => {
             console.log(error.message);
@@ -65,7 +59,7 @@ export class ForgotPasswordComponent implements OnInit {
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Annulé',
-          'La réinitialisation n\'a pas eu lieu.',
+          'La demande de réinitialisation n\'a pas eu lieu.',
           'error'
         )
       }

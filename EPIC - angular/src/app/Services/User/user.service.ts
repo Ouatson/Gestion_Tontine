@@ -21,6 +21,14 @@ export class UserService {
     return this.http.post<any>(`${this.apiServerUrl}/enregistrer`, user);
   }
 
+  public oubliPassword(email: string): Observable<void>{
+    return this.http.post<void>(`${this.apiServerUrl}/oubli-password`, email)
+  }
+
+  public reinitialiser(email: string, password: string): Observable<User>{
+    return this.http.put<User>(`${this.apiServerUrl}/reinitialiser/${email}`,password);
+  }
+
   public modifier(user: User): Observable<any>{
     return this.http.put<any>(`${this.apiServerUrl}/modifier`, user);
   }

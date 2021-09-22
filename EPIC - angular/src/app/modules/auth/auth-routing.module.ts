@@ -3,9 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ReinitPasswordComponent } from './reinit-password/reinit-password.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
-// import { ErrorPage2Component } from './error-page2/error-page2.component';
 
 const routes: Routes = [
   {
@@ -28,11 +28,11 @@ const routes: Routes = [
     component: ErrorPageComponent,
     data: { title: 'Error-404' }
   },
-  // {
-  //   path: 'error-500',
-  //   component: ErrorPage2Component,
-  //   data: { title: 'Error-500' }
-  // },
+  {
+    path: 'change-mot-de-passe',
+    component: ReinitPasswordComponent,
+    data: { title: 'change-mot-de-passe' }
+  },
 ];
 
 @NgModule({
@@ -42,7 +42,9 @@ const routes: Routes = [
 export class AuthRoutingModule {
   static components = [
     LoginComponent,
-    ForgotPasswordComponent
+    RegisterComponent,
+    ForgotPasswordComponent,
+    ErrorPageComponent
   ];
 
 }
