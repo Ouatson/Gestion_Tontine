@@ -137,7 +137,7 @@
                     <div class="form-row">
                         <div>
                             <label for="operateur">Choisir le mode de paiement</label><br>
-                            <select id="operateur" name="operateur" [(ngModel)]="versement.operateur" style="height: 38px; width: 300px;" required placeholder="d.ff">
+                            <select id="operateur" name="operateur" class="form-control custom-select" [(ngModel)]="versement.operateur" style="height: 38px; width: 300px;" required placeholder="d.ff">
                                 <option hidden value="" disabled selected>Veuillez selectionner</option>
                                 <option value="OrangeMoney">Orange Money</option>
                                 <option value="FreeMoney">Free Money</option>

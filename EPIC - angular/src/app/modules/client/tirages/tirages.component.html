@@ -167,7 +167,7 @@
                 <div *ngIf="tontineSelect.typeTirage == 'Choix'">
                     <form (ngSubmit)="choixFait()" #choix="ngForm">
                       <h2 class="text-center">Choisir la prochaine personne à retirer</h2>
-                      <select name="participant" id="participant" class="form-control" [(ngModel)]="participantChoix" style="height: 38px; width: 100%;" required>
+                      <select name="participant" id="participant" class="form-control custom-select" [(ngModel)]="participantChoix" style="height: 38px; width: 100%;" required>
                         <option *ngFor="let part of participantsTontine" value="{{part}}">{{part.prenom}} {{part.nom}}</option>
                       </select><br><br>
                       <button [disabled]="choix.invalid" class="btn btn-success btn-block ml-auto mr-auto" type="submit">Valider</button>

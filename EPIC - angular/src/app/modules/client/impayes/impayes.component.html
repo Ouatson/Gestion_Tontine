@@ -105,7 +105,7 @@
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <label for="operateur">Operateur de retrait</label>
                                 <select id="operateur" name="operateur" [(ngModel)]="impaye.operateur"
-                                    style="height: 38px; width: 100%;" required placeholder="d.ff">
+                                     class="form-control custom-select" style="height: 38px; width: 100%;" required placeholder="d.ff">
                                     <option hidden value="" disabled selected>Veuillez selectionner</option>
                                     <option value="OrangeMoney">Orange Money</option>
                                     <option value="FreeMoney">Free Money</option>
@@ -156,7 +156,7 @@
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <label for="operateur">Operateur de retrait</label>
                                 <select id="operateur" name="operateur" [(ngModel)]="impayeSelected.operateur" ngModel={{impayeSelected.operateur}}
-                                    style="height: 38px; width: 100%;" required>
+                                     class="form-control custom-select" style="height: 38px; width: 100%;" required>
                                     <option hidden value="" disabled selected>Veuillez selectionner</option>
                                     <option value="Banque">Banque Islamique</option>
                                     <option value="OrangeMoney">Orange Money</option>

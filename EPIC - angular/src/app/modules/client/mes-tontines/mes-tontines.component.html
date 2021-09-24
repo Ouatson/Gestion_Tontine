@@ -253,7 +253,7 @@
                             <div class="col-md-2" style="margin-top: 20px;">
                                 <label for="tirage"><span>Tirage par...</span></label><br>
                                 <select id="tirage" name="tirage" [(ngModel)]="tontine.tirage" style="height: 36px;" required
-                                    placeholder="d.ff">
+                                    placeholder="d.ff" class="form-control custom-select">
                                     <option hidden value="" disabled selected>Veuillez selectionner</option>
                                     <option value="Jours">Jours</option>
                                     <option value="Semaines">Semaines</option>
@@ -263,7 +263,7 @@
                             <div class="col-md-2" style="margin-top: 20px;">
                                 <label for="typeTirage">Type de tirage</label>
                                 <select id="typeTirage" name="typeTirage" [(ngModel)]="tontine.typeTirage" style="height: 36px;"
-                                    required placeholder="d.ff">
+                                    required placeholder="d.ff" class="form-control custom-select">
                                     <option hidden value="" disabled selected>Veuillez selectionner</option>
                                     <option value="OrdreArrivee">Par ordre d'insertion</option>
                                     <option value="Aleatoire">Aleatoire</option>
@@ -353,7 +353,7 @@
                         </div>
                         <div class="col-md-2" style="margin-top: 20px;">
                             <label for="tirage"><span>Tirage par...</span></label><br>
-                            <select id="tirage" name="tirage" [(ngModel)]="tontineSelect.tirage" ngModel={{tontineSelect.tirage}} style="height: 36px;" required placeholder="d.ff">
+                            <select id="tirage" name="tirage" class="form-control custom-select" [(ngModel)]="tontineSelect.tirage" ngModel={{tontineSelect.tirage}} style="height: 36px;" required placeholder="d.ff">
                                 <option hidden value="" disabled selected>Veuillez selectionner</option>
                                 <option value="Jours">Jours</option>
                                 <option value="Semaines">Semaines</option>
@@ -362,7 +362,7 @@
                         </div>
                         <div class="col-md-2" style="margin-top: 20px;">
                             <label for="typeTirage">Type de tirage</label>
-                            <select id="typeTirage" name="typeTirage" [(ngModel)]="tontineSelect.typeTirage" ngModel={{tontineSelect.typeTirage}} style="height: 36px;" required placeholder="d.ff">
+                            <select id="typeTirage" name="typeTirage" class="form-control custom-select" [(ngModel)]="tontineSelect.typeTirage" ngModel={{tontineSelect.typeTirage}} style="height: 36px;" required placeholder="d.ff">
                                 <option hidden value="" disabled selected>Veuillez selectionner</option>
                                 <option value="OrdreArrivee">Par ordre d'insertion</option>
                                 <option value="Aleatoire">Aleatoire</option>

@@ -104,7 +104,7 @@
                         <div class="form-row">
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
-                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="vol.tontineId" #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
+                                <select name="tontineId" id="tontineId" class="form-control custom-select" [(ngModel)]="vol.tontineId" #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
                                     <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
                                 </select>
                             </div>
@@ -169,7 +169,7 @@
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <input type="hidden" name="id" ngModel={{volSelected.id}} class="form-control" required>
                                 <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
-                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="volSelected.tontineId" ngModel={{volSelected.tontineId}} #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
+                                <select name="tontineId" id="tontineId" class="form-control custom-select" [(ngModel)]="volSelected.tontineId" ngModel={{volSelected.tontineId}} #tontineId="ngModel" (change)="reinit(tontineId)" style="height: 38px; width: 100%;" required>
                                     <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
                                 </select>
                             </div>
