@@ -98,7 +98,7 @@
                         <div class="form-row">
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
-                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="impaye.tontineId" style="height: 38px; width: 100%;" required>
+                                <select name="tontineId" id="tontineId" class="form-control custom-select" [(ngModel)]="impaye.tontineId" style="height: 38px; width: 100%;" required>
                                     <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
                                 </select>
                             </div>
@@ -149,7 +149,7 @@
                             <div class="col-md-6" style="margin-top: 20px;">
                                 <input type="hidden" name="id" ngModel={{impayeSelected.id}} class="form-control" required>
                                 <label for="tontineId">Selectionnez tontine concernée (selon description)</label>
-                                <select name="tontineId" id="tontineId" class="form-control" [(ngModel)]="impayeSelected.tontineId" ngModel={{impayeSelected.tontineId}} style="height: 38px; width: 100%;" required>
+                                <select name="tontineId" id="tontineId" class="form-control custom-select" [(ngModel)]="impayeSelected.tontineId" ngModel={{impayeSelected.tontineId}} style="height: 38px; width: 100%;" required>
                                     <option *ngFor="let tontine of tontines" value="{{tontine.id}}">{{tontine.description}}</option>
                                 </select>
                             </div>

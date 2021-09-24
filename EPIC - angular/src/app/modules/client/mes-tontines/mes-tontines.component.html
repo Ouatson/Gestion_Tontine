@@ -190,7 +190,7 @@
                             <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.montant}} Francs CFA</p></td>
                         </tr>
                         <tr>
-                            <td>Date de debut de la tontine</td>
+                            <td>Date de début de la tontine</td>
                             <td><p style="margin-left: 100px;" class="card-text">{{tontineSelect.dateDebut}}</p></td>
                         </tr>
                         <tr>
@@ -267,16 +267,16 @@
                                     <option hidden value="" disabled selected>Veuillez selectionner</option>
                                     <option value="OrdreArrivee">Par ordre d'insertion</option>
                                     <option value="Aleatoire">Aleatoire</option>
-                                    <option value="Choix">Definir propre choix</option>
+                                    <option value="Choix">Définir propre choix</option>
                                 </select>
                             </div>
                             <div class="col-md-2" style="margin-top: 20px;">
-                                <label for="periodicite">Periode tirage choisi</label>
+                                <label for="periodicite">Période tirage choisi</label>
                                 <input name="periodicite" [(ngModel)]="tontine.periodicite" id="periodicite" placeholder="Periodicite"
                                     type="number" class="form-control" required>
                             </div>
                             <div class="col-md-6" style="margin-top: 20px;">
-                                <label for="dateDebut">Date de debut (jour tirage)</label>
+                                <label for="dateDebut">Date de début (jour tirage)</label>
                                 <input name="dateDebut" [(ngModel)]="tontine.dateDebut" dateDebut #dateDebutvar="ngModel"
                                     min="{{today}}" id="dateDebut" type="date" class="form-control" required>
                             </div>
@@ -370,7 +370,7 @@
                             </select>
                         </div>
                         <div class="col-md-2" style="margin-top: 20px;">
-                            <label for="periodicite">Periode tirage choisi</label>
+                            <label for="periodicite">Période tirage choisi</label>
                             <input name="periodicite" [(ngModel)]="tontineSelect.periodicite" ngModel={{tontineSelect.periodicite}} id="periodicite" placeholder="Periodicite" type="number" class="form-control" required>
                         </div>
                         <div class="col-md-6" style="margin-top: 20px;">
@@ -460,7 +460,7 @@
                                     <th>Profession</th>
                                     <th>Sexe</th>
                                     <th>Status matrimonial</th>
-                                    <th>Personne contacter</th>
+                                    <th>Personne à contacter</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -502,7 +502,7 @@
                                     <th>Profession</th>
                                     <th>Sexe</th>
                                     <th>Status matrimonial</th>
-                                    <th>Personne a contacter</th>
+                                    <th>Personne à contacter</th>
                                 </tr>
                             </thead>
                             <tbody>
