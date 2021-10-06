@@ -38,7 +38,7 @@ public class Tontine implements Serializable {
     private Tirage tirage;
     private LocalDate dateDebut;
     private LocalDate dateFin;
-    private Long periodicite;
+    private int periodicite;
     @Enumerated(EnumType.STRING)
     private TypeTirage typeTirage;
     private String description;
@@ -64,7 +64,7 @@ public class Tontine implements Serializable {
                    Tirage tirage,
                    LocalDate dateDebut,
                    LocalDate dateFin,
-                   Long periodicite,
+                   int periodicite,
                    TypeTirage typeTirage,
                    String description,
                    User proprietaire) {
@@ -146,11 +146,11 @@ public class Tontine implements Serializable {
         this.dateFin = dateFin;
     }
 
-    public Long getPeriodicite() {
+    public int getPeriodicite() {
         return periodicite;
     }
 
-    public void setPeriodicite(Long periodicite) {
+    public void setPeriodicite(int periodicite) {
         this.periodicite = periodicite;
     }
 
