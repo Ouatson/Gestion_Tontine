@@ -33,7 +33,7 @@ public class Tontine implements Serializable {
     private String code;
     private String nom;
     private int nombrePart;
-    private int montant;
+    private Long montant;
     @Enumerated(EnumType.STRING)
     private Tirage tirage;
     private LocalDate dateDebut;
@@ -60,7 +60,7 @@ public class Tontine implements Serializable {
                    String code,
                    String nom,
                    int nombrePart,
-                   int montant,
+                   Long montant,
                    Tirage tirage,
                    LocalDate dateDebut,
                    LocalDate dateFin,
@@ -114,11 +114,11 @@ public class Tontine implements Serializable {
         this.nombrePart = nombrePart;
     }
 
-    public int getMontant() {
+    public Long getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(Long montant) {
         this.montant = montant;
     }
 

@@ -16,7 +16,7 @@ public class Tirages implements Serializable {
     private Long id;
     private String emailRetire;
     private String nomRetire;
-    private int montant;
+    private Long montant;
     private Date dateTirage;
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
@@ -25,7 +25,7 @@ public class Tirages implements Serializable {
     public Tirages() {
     }
 
-    public Tirages(Long id, String emailRetire, String nomRetire, int montant, Date dateTirage, Tontine tontine) {
+    public Tirages(Long id, String emailRetire, String nomRetire, Long montant, Date dateTirage, Tontine tontine) {
         this.id = id;
         this.emailRetire = emailRetire;
         this.nomRetire = nomRetire;
@@ -58,11 +58,11 @@ public class Tirages implements Serializable {
         this.nomRetire = nomRetire;
     }
 
-    public int getMontant() {
+    public Long getMontant() {
         return montant;
     }
 
-    public void setMontant(int montant) {
+    public void setMontant(Long montant) {
         this.montant = montant;
     }
 
