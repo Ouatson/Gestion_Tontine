@@ -71,6 +71,10 @@ export class SignalComponent implements OnInit {
   public soumission(signal: NgForm){
     console.log(signal.form);
     this.signal.utilisateur = this.user;
+    this.signal.utilisateur.tontine = null;
+    this.signal.utilisateur.signals = null;
+    this.signal.utilisateur.vols = null;
+    this.signal.utilisateur.impayes = null;
     this.signal.dateDeposition = moment().toISOString();
     this.signalsService.ajoutSignal(this.signal).subscribe(
       (response: Signals) => {
@@ -85,6 +89,11 @@ export class SignalComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        Swal.fire(
+          'Signalement non enregistré !',
+          'Une erreur est surevenue lors de l\'envoi de ce signalement.\nVeuillez réessayer svp !Indice: Description trop longue.',
+          'warning'
+        )
       }
     )
   }
@@ -113,6 +122,11 @@ export class SignalComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         console.log(error.message);
+        Swal.fire(
+          'Signalement non modifié !',
+          'Une erreur est surevenue lors de la modification de ce signalement.\nVeuillez réessayer svp !Indice: Description trop longue.',
+          'warning'
+        )
       }
     )
   }

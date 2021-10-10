@@ -376,6 +376,7 @@ export class TiragesComponent implements OnInit {
                       let tire = document.getElementById('choix');
                       tire.innerHTML = responseFinal.nomRetire;
                     }
+                    this.getMyTontines();
                     Swal.fire(
                       'Tirage terminé !',
                       'Vous venez d\'effectuer un tirage avec succes.',
@@ -411,6 +412,9 @@ export class TiragesComponent implements OnInit {
   }
 
   detailsHist(content: TemplateRef<any>, tontine: Tontine) {
+    tontine.tirages.forEach(tir => {
+      tir.dateTirage = moment(tir.dateTirage).format('LLLL');
+    });
     this.tirages = tontine.tirages;
     this.modalRefChild = this.modalService.show(
       content,

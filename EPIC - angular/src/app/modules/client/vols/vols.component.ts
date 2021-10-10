@@ -160,6 +160,11 @@ export class VolsComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             console.log(error.message);
+            Swal.fire(
+              'Déposition de vol non enregistrée !',
+              'Un problème est suvenu lors de l\'envoi de cette déposition de vol.\nIndice: Description trop longue.',
+              'warning'
+            )
           }
         )
       }
@@ -217,6 +222,11 @@ export class VolsComponent implements OnInit {
           },
           (error: HttpErrorResponse) => {
             console.log(error.message);
+            Swal.fire(
+              'Déposition de vol non modifiée !',
+              'Un problème est suvenu lors de la modification de cette déposition de vol.\nIndice: Description trop longue.',
+              'warning'
+            )
           }
         )
       }

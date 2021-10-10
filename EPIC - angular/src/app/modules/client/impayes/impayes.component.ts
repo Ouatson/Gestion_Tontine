@@ -90,6 +90,10 @@ export class ImpayesComponent implements OnInit {
   // Methode pour la soumission de cette deposition
   public soumission(impayes: NgForm){
     this.impaye.proprio = this.user;
+    this.impaye.proprio.signals = null;
+    this.impaye.proprio.tontine = null;
+    this.impaye.proprio.vols = null;
+    this.impaye.proprio.impayes = null;
     this.impaye.dateDeposition = moment().toISOString();
     let id = this.impaye.tontineId;
     let operateur = this.impaye.operateur;
@@ -113,6 +117,11 @@ export class ImpayesComponent implements OnInit {
           },
           (error1: HttpErrorResponse) => {
             console.log(error1.message);
+            Swal.fire(
+              'Déposition d\'impayé non enregistrée !',
+              'Une erreur est survenue lors de cette déposition d\'impayé.\nIndice: Description trop longue.',
+              'warning'
+            )
           }
         )
       }
@@ -151,6 +160,11 @@ export class ImpayesComponent implements OnInit {
           },
           (error1: HttpErrorResponse) => {
             console.log(error1.message);
+            Swal.fire(
+              'Déposition d\'impayé non modifiée !',
+              'Une erreur est survenue lors de cette modification d\'impayé.\nIndice: Description trop longue.',
+              'warning'
+            )
           }
         )
       }
