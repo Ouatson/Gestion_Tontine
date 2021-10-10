@@ -360,6 +360,7 @@ export class MesTontinesComponent implements OnInit {
   // Methode modifictaion de tontine
   public modifierTontine(mod: NgForm){
     this.tontineSelect.proprietaire = null;
+    this.tontineSelect.participant = [];
     this.tontineService.modifierTontine(this.tontineSelect).subscribe(
       (response: Tontine) => {
         this.userService.rechercheUser(this.user.id).subscribe(

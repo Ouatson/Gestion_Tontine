@@ -28,7 +28,7 @@ export class TiragesComponent implements OnInit {
   user: User;
   public autruiUser: User;
   isDisabled: boolean = false;
-  isTired: boolean = false;
+  //isTired: boolean = false;
 
   public hidden: boolean = true;
   
@@ -121,36 +121,40 @@ export class TiragesComponent implements OnInit {
   }
 
   // Pour cacher le bouton de tirage si celui qui devait se faire a deja ete effectue
-  // public isDisabledMines(tontine: Tontine): boolean {
-  //   if(tontine.tirages.length != 0) {
-  //     tontine.tirages.forEach(tirage => {
-  //       let dateTir = moment(tirage.dateTirage).endOf('day');
-  //       let today = moment().endOf('day');
-  //       if (dateTir.isSame(today)) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     });
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  public isDoneMines(tontine: Tontine): boolean {
+    let cbon = false;
+    if(tontine.tirages.length != 0) {
+      tontine.tirages.forEach(tirage => {
+        let dateTir = moment(tirage.dateTirage).endOf('day');
+        let today = moment().endOf('day');
+        if (dateTir.isSame(today)) {
+          cbon = true;
+        } else {
+          cbon = false;
+        }
+      });
+    } else {
+      cbon = false;
+    }
+    return cbon;
+  }
 
   // Pour savoir si oui ou non le tirage a ete effctue dans une autre tontine
-  // public isShown(tontine: Tontine): boolean {
-  //   if(tontine.tirages.length != 0) {
-  //     tontine.tirages.forEach(tirage => {
-  //       if (moment(tirage.dateTirage).endOf('day').isSame(moment().endOf('day'))) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     });
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  public isShown(tontine: Tontine): boolean {
+    let cbon = false;
+    if(tontine.tirages.length != 0) {
+      tontine.tirages.forEach(tirage => {
+        if (moment(tirage.dateTirage).endOf('day').isSame(moment().endOf('day'))) {
+          cbon = true;
+        } else {
+          cbon = false;
+        }
+      });
+    } else {
+      cbon = false;
+    }
+    return cbon;
+  }
 
   // Date des tirages de chaque tontine
   public datesConf(tontine: Tontine, tontines: Tontine[]){
@@ -200,53 +204,22 @@ export class TiragesComponent implements OnInit {
 
   // Modal pour le tirage des tontines
   tirageTontine(content: TemplateRef<any>, tontine: Tontine) {
-    if(tontine.tirages.length != 0) {
-      tontine.tirages.forEach(tirage => {
-        let dateTir = moment(tirage.dateTirage).endOf('day');
-        let today = moment().endOf('day');
-        if (dateTir.isSame(today)) {
-          Swal.fire(
-            'Tirage déjà effectué !',
-            'Vous avez déjà effectué le tirage d\'ajourd\'hui.',
-            'error'
-          )
-        } else {
-          this.participantsTontine.length = 0;
-          this.tontineSelect = tontine;
-          tontine.participant.forEach(participant => {
-            if (participant.tirage == false) {
-              this.participantsTontine.push(participant);
-            }
-          });
-
-          if (tontine.typeTirage == "OrdreArrivee") {
-            this.ActualisationTirage(this.participantsTontine, tontine);
-          }
-
-          this.modalRef = this.modalService.show(
-            content,
-            Object.assign({}, { class: 'gray modal-lg' })
-          );
-        }
-      });
-    } else {
-      this.participantsTontine.length = 0;
-      this.tontineSelect = tontine;
-      tontine.participant.forEach(participant => {
-        if (participant.tirage == false) {
-          this.participantsTontine.push(participant);
-        }
-      });
-
-      if (tontine.typeTirage == "OrdreArrivee") {
-        this.ActualisationTirage(this.participantsTontine, tontine);
+    this.participantsTontine.length = 0;
+    this.tontineSelect = tontine;
+    tontine.participant.forEach(participant => {
+      if (participant.tirage == false) {
+        this.participantsTontine.push(participant);
       }
+    });
 
-      this.modalRef = this.modalService.show(
-        content,
-        Object.assign({}, { class: 'gray modal-lg' })
-      );
+    if (tontine.typeTirage == "OrdreArrivee") {
+      this.ActualisationTirage(this.participantsTontine, tontine);
     }
+
+    this.modalRef = this.modalService.show(
+      content,
+      Object.assign({}, { class: 'gray modal-lg' })
+    );
   }
 
   // Traitement tirage au sort

@@ -57,12 +57,12 @@
                                             <td>{{tontine.dateFin}}</td>
                                             <td>{{tontine.description}}</td>
                                             <td>
-                                                <button class="btn btn-secondary mr-2"
+                                                <button class="btn btn-secondary mr-2" *ngIf="!isDoneMines(tontine); else itIs"
                                                     (click)="tirageTontine(tirage, tontine)">Effectuer Tirage
                                                 </button>
                                                 <!-- Chercher apres une methode pour ca -->
                                                 <!--  *ngIf="!isDisabledMines(tontine); else itIs" -->
-                                                <!-- <ng-template #itIs><p style="color: green;">Tirage déjà effectué !</p></ng-template> -->
+                                                <ng-template #itIs><p style="color: green;">Tirage déjà effectué !</p></ng-template>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -96,7 +96,7 @@
                                             <th>Date de fin</th>
                                             <th>Descripton</th>
                                             <th>Propriétaire</th>
-                                            <!-- <th></th> -->
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -108,10 +108,10 @@
                                             <td>{{tontine.dateFin}}</td>
                                             <td>{{tontine.description}}</td>
                                             <td>{{tontine.proprietaire.prenom}} {{tontine.proprietaire.nom}}</td>
-                                            <!-- <td>
+                                            <td>
                                                 <p *ngIf="isShown(tontine); else notNow" style="color: green;">Tirage effectué !</p>
                                                 <ng-template #notNow><p style="color: red;">Tirage non encore effectué !</p></ng-template>
-                                            </td> -->
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

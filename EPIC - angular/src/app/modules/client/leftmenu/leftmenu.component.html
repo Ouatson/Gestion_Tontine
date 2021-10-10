@@ -65,7 +65,7 @@
                     </li>
                     <li>
                         <label class="custom-switch">
-                            <span class="custom-switch-description">Entête en blanc</span>
+                            <span class="custom-switch-description">Entête en noir</span>
                             <input type="checkbox" (click)="onGeneralSetting(2,$event)" name="custom-switch-checkbox"
                                 class="custom-switch-input btn-pageheader" [checked]="toggle2 ? 'checked' : null">
                             <span class="custom-switch-indicator"></span>
@@ -143,7 +143,7 @@
                 </a>
                 <ul class="collapse" id="ActionsCollapsed" [collapse]="isActionsCollapsed" [isAnimated]="true">
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/gt-actions-versement']" href="javascript:void(0)">Versement</a>
+                        <a class="submenu" [routerLink]="['/gt-actions-versement']" href="javascript:void(0)">Versements</a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                         <a class="submenu" [routerLink]="['/gt-actions-tirages']" href="javascript:void(0)">Tirages</a>
@@ -164,7 +164,7 @@
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                         <a class="submenu" [routerLink]="['/gt-gestion-impayes']" href="javascript:void(0)">
-                            <span>Gestion des Impayes/Virements</span>
+                            <span>Gestion des Impayés/Virements</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">

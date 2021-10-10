@@ -16,10 +16,13 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-versement',
   templateUrl: './versement.component.html',
-  styleUrls: ['./versement.component.scss']
+  styleUrls: ['./versement.component.css']
 })
 export class VersementComponent implements OnInit {
   user: User;
+
+  CreditCard: boolean = true;
+  PayPal: boolean;
 
   public versement = new Versement();
   public versements: Versement[] = [];
@@ -30,9 +33,13 @@ export class VersementComponent implements OnInit {
   public participantsTontine: Participant[];
   public participantSelect: Participant;
 
+  public montant: number;
+  public operateur: string;
+
   EmpAllTab: boolean = true;
   modalRef: BsModalRef;
   modalRefChild: BsModalRef;
+  modalRefChild2: BsModalRef;
 
   constructor(private modalService: BsModalService,
     private participantService: ParticipantService,
@@ -105,12 +112,98 @@ export class VersementComponent implements OnInit {
   }
 
   // Ajout d'un versement, PS n'oublie pas le sweetalert pour le non succes
-  public ajouterVirement(ajouterSomme: NgForm){
-    let montant = this.versement.montant;
-    let operateur = this.versement.operateur;
+  public ajouterVirement(ajouterSomme: NgForm, content: TemplateRef<any>){
+    this.montant = this.versement.montant;
+    this.operateur = this.versement.operateur;
+    if (this.operateur == "CarteBancaire") {
+      this.modalRefChild2 = this.modalService.show(
+        content,
+        Object.assign({}, { class: 'gray modal-md' })
+      );
+    } else {
+      this.versement.participant = this.participantSelect;
+      this.versement.date = moment().toISOString();
+      let btn = document.getElementById("fermVirement");
+      if (this.participantSelect.mise_montant != null) {
+        this.participantSelect.mise_montant += this.versement.montant;
+      } else {
+        this.participantSelect.mise_montant = this.versement.montant;
+      }
+      if (this.participantSelect.mise_montant > (this.tontineSelect.montant*this.tontineSelect.nombrePart)) {
+        Swal.fire(
+          'Alerte !',
+          'Le montant que vous essayez de transferer dépasse la mise totale requise .\nReprenez svp !',
+          'info'
+        )
+        btn.click();
+      } else {
+        this.participantSelect.date_versement = this.versement.date;
+        this.tontineService.rechercheTontine(this.participantSelect.tontine).subscribe(
+          (response: Tontine) => {
+            this.participantSelect.tontine = null;
+            response.proprietaire = null;
+            response.participant = null;
+            response.demandes = null;
+            response.tirages = null;
+            this.participantService.modifierParticipant(this.participantSelect).subscribe(
+              (response1: Participant) => {
+                this.participantService.mettreTontine(response, this.participantSelect.id).subscribe(
+                  (response2: Participant) => {
+                    this.versement.montant = this.montant;
+                    this.versement.operateur = this.operateur;
+                    this.versementService.ajoutVersement(this.versement).subscribe(
+                      (response3: Versement) => {
+                        this.versement = new Versement();
+                        Swal.fire(
+                          'Versement enregistré !',
+                          'Le versement a été enregistré avec succes !',
+                          'success'
+                        )
+                      },
+                      (error: HttpErrorResponse) => {
+                        console.log(error.message);
+                        Swal.fire(
+                          'Erreur !',
+                          'Veuillez réessayer svp !',
+                          'error'
+                        )
+                      }
+                    )
+                  }
+                )
+              },
+              (error: HttpErrorResponse) => {
+                console.log(error.message);
+              }
+            )
+          },
+          (error: HttpErrorResponse) => {
+            console.log(error.message);
+          }
+        )
+        ajouterSomme.reset();
+        btn.click();
+      }
+    }
+  }
+
+  public onPills(number) {
+    this.CreditCard = false;
+    this.PayPal = false;
+
+    if (number == '1') {
+      this.CreditCard = true;
+    } else if (number == '2'){
+      this.PayPal = true;
+    }
+  }
+
+  public caba(cb: NgForm) {
+    let btn = document.getElementById("CbPaypal");
     this.versement.participant = this.participantSelect;
     this.versement.date = moment().toISOString();
-    let btn = document.getElementById("fermVirement");
+    this.versement.montant = this.montant;
+    this.versement.operateur = this.operateur;
     if (this.participantSelect.mise_montant != null) {
       this.participantSelect.mise_montant += this.versement.montant;
     } else {
@@ -119,7 +212,7 @@ export class VersementComponent implements OnInit {
     if (this.participantSelect.mise_montant > (this.tontineSelect.montant*this.tontineSelect.nombrePart)) {
       Swal.fire(
         'Alerte !',
-        'Le montant que vous essayez de transferer dépasse votre mise totale requise .\nReprenez svp !',
+        'Le montant que vous essayez de transferer dépasse la mise totale requise .\nReprenez svp !',
         'info'
       )
       btn.click();
@@ -136,8 +229,6 @@ export class VersementComponent implements OnInit {
             (response1: Participant) => {
               this.participantService.mettreTontine(response, this.participantSelect.id).subscribe(
                 (response2: Participant) => {
-                  this.versement.montant = montant;
-                  this.versement.operateur = operateur;
                   this.versementService.ajoutVersement(this.versement).subscribe(
                     (response3: Versement) => {
                       this.versement = new Versement();
@@ -158,7 +249,6 @@ export class VersementComponent implements OnInit {
                   )
                 }
               )
-              this.getTontines();
             },
             (error: HttpErrorResponse) => {
               console.log(error.message);
@@ -169,9 +259,8 @@ export class VersementComponent implements OnInit {
           console.log(error.message);
         }
       )
-      ajouterSomme.reset();
+      cb.reset();
       btn.click();
-      this.getTontines();
     }
   }
 
@@ -206,7 +295,18 @@ export class VersementComponent implements OnInit {
                           'Le versement a été révoqué avec succes !',
                           'success'
                         )
-                        this.getTontines();
+                        this.versements.length = 0;
+                        this.versementService.tousVersements(this.participantSelect.id).subscribe(
+                          (response: Versement[]) => {
+                            response.forEach(vers => {
+                              vers.date = moment(vers.date).format('LLLL');
+                              this.versements.push(vers);
+                            });
+                          },
+                          (error: HttpErrorResponse) => {
+                            console.log(error.message);
+                          }
+                        )
                       },
                       (error: HttpErrorResponse) => {
                         console.log(error.message);
@@ -232,7 +332,6 @@ export class VersementComponent implements OnInit {
             )
           }
         )
-        this.getTontines();
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Annulé',

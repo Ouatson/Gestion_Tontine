@@ -68,6 +68,8 @@ export class DemandesParticipationsComponent implements OnInit {
 
   // Toutes les demandes qui sont adressees a mes tontines et que je n'ai pas touche (accepte ou refuse)
   public getMyDemandes(): void{
+    this.demandesToutesTontines.length = 0;
+    this.demandesAttente.length = 0;
     this.demandesSoumises.length = 0;
     this.userService.mesTontines(this.user.id).subscribe(
       (response: any) => {
@@ -99,6 +101,7 @@ export class DemandesParticipationsComponent implements OnInit {
   }
 
   public getDemandesFaites(): void {
+    this.demandesToutesTontines.length = 0;
     this.demandesEmises.length = 0;
     this.demandesService.demandesFaites(this.user.email).subscribe(
       (response: Demandes[]) => {

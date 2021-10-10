@@ -81,7 +81,7 @@
     </div>
     <div class="modal-body">
         <div>
-            <h2 class="text-center">Participants</h2>
+            <h2 class="card-title text-center">Participants</h2>
             <table *ngIf="participantsTontine.length != 0" class="table table-striped">
                 <thead>
                     <tr>
@@ -121,7 +121,7 @@
     </div>
 </ng-template>
 
-<!-- Modal pour effectuer les virements -->
+<!-- Modal pour effectuer les versements -->
 <ng-template #virementModal>
     <div class="modal-header">
         <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Effectuer un versement</h5>
@@ -132,7 +132,7 @@
     <div class="modal-body">
         <div class="main-card card">
             <div class="card-body">
-                <form novalidate (ngSubmit)="ajouterVirement(ajouterSomme)" #ajouterSomme="ngForm">
+                <form novalidate (ngSubmit)="ajouterVirement(ajouterSomme, crtpay)" #ajouterSomme="ngForm">
                     <div class="form-row">
                         <div>
                             <label for="operateur">Choisir le mode de paiement</label><br>
@@ -140,9 +140,8 @@
                                 <option hidden value="" disabled selected>Veuillez selectionner</option>
                                 <option value="OrangeMoney">Orange Money</option>
                                 <option value="FreeMoney">Free Money</option>
-                                <option value="Wari">Wari</option>
-                                <option value="CarteBancaire">Carte Bancaire</option>
                                 <option value="Wave">Wave</option>
+                                <option value="CarteBancaire">Carte Bancaire/PayPal</option>
                             </select>
                         </div>
                         <div class="ml-5">
@@ -193,6 +192,115 @@
                     <div class="alert alert-warning" role="alert">
                         <h4 class="alert-heading text-center">PAS DE VERSEMENT DANS CETTE TONTINE !</h4>
                         <p class="text-center">AUCUN VERSEMENT EFFECTUE.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Modal pour Carte/PayPal/Banque -->
+<ng-template #crtpay>
+    <div class="modal-header">
+        <h5 style="text-align: center; width: 100%;" class="modal-title" id="exampleModalLabel">Paiement Bancaire ou PayPal</h5>
+        <button type="button" id="CbPaypal" (click)="modalRefChild2.hide()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card ">
+            <div class="card-header">
+                <div class="bg-white shadow-sm pt-2 pl-2 pr-2 pb-2">
+                    <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                        <li class="nav-item">
+                            <a data-toggle="pill" id="CarteBancaire" href="javascript:void(0)" class="nav-link"
+                                (click)="onPills('1')" [ngClass]="{'active': CreditCard}">
+                                <i class="fa fa-cc-visa mr-2"></i>
+                                Carte de Crédit
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="pill" id="PayPal" href="javascript:void(0)" class="nav-link"
+                                (click)="onPills('2')" [ngClass]="{'active': PayPal}">
+                                <i class="fa fa-cc-paypal mr-2"></i>
+                                Paypal
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div id="credit-card" class="tab-pane fade pt-3" [ngClass]="{'show active': CreditCard}" role="tabpanel">
+                        <form novalidate (ngSubmit)="caba(cb)" #cb="ngForm">
+                            <div class="form-group">
+                                <label for="nom">
+                                    <h6>Nom sur la carte</h6>
+                                </label>
+                                <input type="text" id="nom" name="nom" ngModel placeholder="Nom de la carte" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardNumber">
+                                    <h6>Numéro de la carte</h6>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" id="cardNumber" name="cardNumber" ngModel placeholder="Numéro de carte valide" class="form-control" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text text-muted">
+                                            <i class="fa fa-cc-visa-dark mx-1"></i>
+                                            <i class="fa fa-cc-mastercard mx-1"></i>
+                                            <i class="fa fa-cc-amex mx-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <label>
+                                            <span class="hidden-xs">
+                                                <h6>Date d'expiration</h6>
+                                            </span>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="number" placeholder="MM" name="mois" ngModel class="form-control" required>
+                                            <input type="number" placeholder="YY" name="annee" ngModel class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mb-4">
+                                        <label data-toggle="tooltip" title="Code à 3 chiffres au dos de la carte">
+                                            <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                        </label>
+                                        <input type="text" name="cvv" ngModel required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button [disabled]="cb.invalid" type="submit" class="subscribe btn btn-primary btn-block shadow-sm">Effectuer le versement</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="paypal" class="tab-pane fade pt-3" [ngClass]="{'show active': PayPal}" role="tabpanel">
+                        <h6 class="pb-2">Sélectionnez votre type de compte paypal</h6>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio" checked>
+                                National
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio" class="ml-5">
+                                International
+                            </label>
+                        </div>
+                        <p> 
+                            <button type="button" class="btn btn-primary">
+                                <i class="fa fa-paypal mr-2"></i>
+                                Connexion à mon Paypal
+                            </button>
+                        </p>
+                        <p class="text-muted">Remarque : Après avoir cliqué sur le bouton, vous serez dirigé vers une passerelle sécurisée pour le paiement. Après avoir terminé le processus de paiement, vous serez redirigé vers le site Web pour voir les détails de votre transaction.</p>
                     </div>
                 </div>
             </div>
