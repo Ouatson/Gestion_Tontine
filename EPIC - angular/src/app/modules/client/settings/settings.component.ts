@@ -25,7 +25,6 @@ export class SettingsComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem("userConnected"));
   }
 
-
   onTab(number) {
     this.Profil = false;
     this.Changepassword = false;
@@ -58,7 +57,9 @@ export class SettingsComponent implements OnInit {
         this.userService.rechercheUser(this.user.id).subscribe(
           (response: User) => {
             response.tontine.forEach(tont => {
-              this.userMod.tontine.push(tont.id);
+              tont.proprietaire = null
+              tont.participant = null
+              this.userMod.tontine.push(tont);
             })
             this.userMod.signals = response.signals;
             this.userMod.vols = response.vols;
